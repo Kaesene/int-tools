@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface Category {
@@ -23,7 +23,8 @@ interface Product {
   categoryId: string;
 }
 
-export default function EditProductPage({ params }: { params: { id: string } }) {
+export default function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -45,7 +46,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
 
   useEffect(() => {
     Promise.all([
-      fetch(`/api/products/${params.id}`).then((res) => res.json()),
+      fetch(`/api/products/${id}`).then((res) => res.json()),
       fetch('/api/categories').then((res) => res.json()),
     ]).then(([productData, categoriesData]) => {
       setProduct(productData);
@@ -64,14 +65,14 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
         isActive: productData.isActive,
       });
     });
-  }, [params.id]);
+  }, [id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const response = await fetch(`/api/products/${params.id}`, {
+      const response = await fetch(`/api/products/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -102,7 +103,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
 
     setDeleting(true);
     try {
-      const response = await fetch(`/api/products/${params.id}`, {
+      const response = await fetch(`/api/products/${id}`, {
         method: 'DELETE',
       });
 
