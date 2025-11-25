@@ -31,18 +31,20 @@ export default async function Home() {
     <div className="min-h-screen">
       {/* Hero Section - Simples e Clean */}
       <section className="bg-black py-24 md:py-40">
-        <div className="container mx-auto px-6 text-center">
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 text-white">
-            INT Tools
-          </h1>
-          <p className="text-2xl md:text-3xl text-white mb-8 max-w-3xl mx-auto">
-            Ferramentas e Tecnologia Importada
-          </p>
-          {products.length === 0 && (
-            <p className="text-gray-300 text-lg">
-              Em breve, novos produtos disponíveis
+        <div className="w-full px-6">
+          <div className="max-w-5xl mx-auto text-center">
+            <h1 className="text-5xl md:text-7xl font-bold mb-8 text-white">
+              INT Tools
+            </h1>
+            <p className="text-2xl md:text-3xl text-white font-light">
+              Ferramentas e Tecnologia Importada
             </p>
-          )}
+            {products.length === 0 && (
+              <p className="text-gray-300 text-lg mt-6">
+                Em breve, novos produtos disponíveis
+              </p>
+            )}
+          </div>
         </div>
       </section>
 

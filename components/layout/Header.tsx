@@ -9,33 +9,31 @@ export function Header() {
 
   return (
     <header className="border-b border-gray-200 bg-white sticky top-0 z-50">
-      <div className="w-full px-8 lg:px-12">
-        <div className="flex items-center h-20 max-w-[1600px] mx-auto">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20">
           {/* Logo - Esquerda */}
-          <div className="flex-shrink-0">
-            <Link href="/" className="text-3xl font-bold text-black hover:text-gray-700 transition-colors">
-              INT Tools
-            </Link>
-          </div>
+          <Link href="/" className="text-3xl font-bold text-black hover:text-gray-700 transition-colors flex-shrink-0">
+            INT Tools
+          </Link>
 
           {/* Desktop Navigation - Centro */}
-          <nav className="hidden md:flex items-center gap-10 flex-1 justify-center">
-            <Link href="/" className="text-sm font-semibold text-gray-700 hover:text-black transition-colors">
+          <nav className="hidden lg:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
+            <Link href="/" className="text-sm font-semibold text-gray-700 hover:text-black transition-colors whitespace-nowrap">
               Início
             </Link>
-            <Link href="/produtos" className="text-sm font-semibold text-gray-700 hover:text-black transition-colors">
+            <Link href="/produtos" className="text-sm font-semibold text-gray-700 hover:text-black transition-colors whitespace-nowrap">
               Produtos
             </Link>
-            <Link href="/sobre" className="text-sm font-semibold text-gray-700 hover:text-black transition-colors">
+            <Link href="/sobre" className="text-sm font-semibold text-gray-700 hover:text-black transition-colors whitespace-nowrap">
               Sobre
             </Link>
-            <Link href="/contato" className="text-sm font-semibold text-gray-700 hover:text-black transition-colors">
+            <Link href="/contato" className="text-sm font-semibold text-gray-700 hover:text-black transition-colors whitespace-nowrap">
               Contato
             </Link>
           </nav>
 
           {/* Icons - Extrema direita */}
-          <div className="flex items-center gap-6 flex-shrink-0">
+          <div className="flex items-center gap-4 sm:gap-6 flex-shrink-0 ml-auto">
             {/* Search Icon */}
             <button className="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Buscar">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
