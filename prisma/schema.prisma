@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// User model - para admin e clientes
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  role          UserRole  @default(CUSTOMER)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  addresses Address[]
+  orders    Order[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  CUSTOMER
+}
+
+// Category model
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  image       String?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  products Product[]
+
+  @@map("categories")
+}
+
+// Product model
+model Product {
+  id               String   @id @default(cuid())
+  name             String
+  slug             String   @unique
+  description      String?
+  shortDescription String?
+  price            Float
+  comparePrice     Float?
+  images           String[]
+  sku              String   @unique
+  stock            Int      @default(0)
+  isActive         Boolean  @default(true)
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  categoryId String
+  category   Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  orderItems OrderItem[]
+
+  @@map("products")
+}
+
+// Address model
+model Address {
+  id          String  @id @default(cuid())
+  name        String
+  street      String
+  number      String
+  complement  String?
+  neighborhood String
+  city        String
+  state       String
+  zipCode     String
+  isDefault   Boolean @default(false)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  userId String
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders Order[]
+
+  @@map("addresses")
+}
+
+// Order model
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique @default(cuid())
+  status          OrderStatus @default(PENDING)
+  paymentMethod   String?
+  paymentId       String?
+  subtotal        Float
+  shippingCost    Float
+  discount        Float       @default(0)
+  total           Float
+  trackingCode    String?
+  notes           String?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  addressId String
+  address   Address     @relation(fields: [addressId], references: [id])
+  items     OrderItem[]
+
+  @@map("orders")
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+// OrderItem model
+model OrderItem {
+  id       String @id @default(cuid())
+  quantity Int
+  price    Float
+
+  // Relations
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
