@@ -1,8 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { prisma } from '@/lib/prisma';
+import type { Product, Category } from '@prisma/client';
 
-async function getProducts() {
+type ProductWithCategory = Product & {
+  category: Category;
+};
+
+async function getProducts(): Promise<ProductWithCategory[]> {
   try {
     const products = await prisma.product.findMany({
       where: { isActive: true },
