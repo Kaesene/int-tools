@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export const revalidate = 0; // Sempre buscar dados frescos
+export const dynamic = 'force-dynamic';
 
 async function getProducts() {
   return await prisma.product.findMany({

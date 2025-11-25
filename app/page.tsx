@@ -3,8 +3,7 @@ import Image from 'next/image';
 import { prisma } from '@/lib/prisma';
 import type { Product, Category } from '@prisma/client';
 
-// Revalidar a cada 10 segundos
-export const revalidate = 10;
+export const dynamic = 'force-dynamic';
 
 type ProductWithCategory = Product & {
   category: Category;
