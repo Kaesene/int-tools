@@ -74,29 +74,29 @@ export default async function AdminDashboard() {
   ];
 
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600 mt-2">Visão geral da loja</p>
+    <div className="max-w-7xl">
+      <div className="mb-12">
+        <h1 className="text-4xl font-bold text-gray-900">Dashboard</h1>
+        <p className="text-gray-600 mt-3 text-lg">Visão geral da loja</p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
         {cards.map((card) => (
           <div
             key={card.title}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+            className="bg-white rounded-xl shadow-md border border-gray-200 p-8 hover:shadow-lg transition-shadow"
           >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
                   {card.title}
                 </p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-3xl font-bold text-gray-900">
                   {card.value}
                 </p>
               </div>
-              <div className={`${card.color} text-white p-3 rounded-lg`}>
+              <div className={`${card.color} text-white p-4 rounded-xl shadow-sm`}>
                 {card.icon}
               </div>
             </div>
@@ -105,9 +105,9 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-4">Ações Rápidas</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-white rounded-xl shadow-md border border-gray-200 p-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Ações Rápidas</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <a
             href="/admin/produtos/novo"
             className="flex items-center gap-3 p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-black hover:bg-gray-50 transition-colors"

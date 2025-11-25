@@ -50,13 +50,15 @@ export default async function AdminLayout({
         </div>
       </header>
 
-      <div className="flex">
+      <div className="flex min-h-screen">
         {/* Sidebar */}
         <AdminSidebar />
 
         {/* Main Content */}
-        <main className="flex-1 p-8">
-          {children}
+        <main className="flex-1 p-10 bg-gray-50">
+          <div className="max-w-[1400px] mx-auto">
+            {children}
+          </div>
         </main>
       </div>
     </div>
