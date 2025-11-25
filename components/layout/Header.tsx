@@ -9,15 +9,17 @@ export function Header() {
 
   return (
     <header className="border-b border-gray-200 bg-white sticky top-0 z-50">
-      <div className="container mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo - Mais destaque */}
-          <Link href="/" className="text-3xl font-bold text-black hover:text-gray-700 transition-colors">
-            INT Tools
-          </Link>
+      <div className="w-full px-8 lg:px-12">
+        <div className="flex items-center h-20 max-w-[1600px] mx-auto">
+          {/* Logo - Esquerda */}
+          <div className="flex-shrink-0">
+            <Link href="/" className="text-3xl font-bold text-black hover:text-gray-700 transition-colors">
+              INT Tools
+            </Link>
+          </div>
 
-          {/* Desktop Navigation - Centralizado */}
-          <nav className="hidden md:flex items-center gap-10 absolute left-1/2 transform -translate-x-1/2">
+          {/* Desktop Navigation - Centro */}
+          <nav className="hidden md:flex items-center gap-10 flex-1 justify-center">
             <Link href="/" className="text-sm font-semibold text-gray-700 hover:text-black transition-colors">
               Início
             </Link>
@@ -32,8 +34,8 @@ export function Header() {
             </Link>
           </nav>
 
-          {/* Icons - Bem na direita */}
-          <div className="flex items-center gap-6">
+          {/* Icons - Extrema direita */}
+          <div className="flex items-center gap-6 flex-shrink-0">
             {/* Search Icon */}
             <button className="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Buscar">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

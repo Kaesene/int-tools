@@ -30,16 +30,16 @@ export default async function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section - Simples e Clean */}
-      <section className="bg-black text-white py-20 md:py-32">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
+      <section className="bg-black py-24 md:py-40">
+        <div className="container mx-auto px-6 text-center">
+          <h1 className="text-5xl md:text-7xl font-bold mb-8 text-white">
             INT Tools
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto">
+          <p className="text-2xl md:text-3xl text-white mb-8 max-w-3xl mx-auto">
             Ferramentas e Tecnologia Importada
           </p>
           {products.length === 0 && (
-            <p className="text-gray-400">
+            <p className="text-gray-300 text-lg">
               Em breve, novos produtos disponíveis
             </p>
           )}
@@ -47,13 +47,13 @@ export default async function Home() {
       </section>
 
       {/* Products Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-12">
-            <h2 className="text-3xl font-bold">Produtos</h2>
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">Produtos</h2>
             {products.length > 0 && (
-              <Link href="/produtos" className="text-sm font-medium hover:underline">
-                Ver todos
+              <Link href="/produtos" className="inline-block text-base font-semibold text-black hover:text-gray-600 border-b-2 border-black hover:border-gray-600 transition-colors pb-1">
+                Ver todos os produtos →
               </Link>
             )}
           </div>
