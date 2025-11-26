@@ -2,6 +2,7 @@
 
 import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
+import { ImageUpload } from '@/components/admin/ImageUpload';
 
 interface Category {
   id: string;
@@ -30,6 +31,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
   const [deleting, setDeleting] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [product, setProduct] = useState<Product | null>(null);
+  const [images, setImages] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
@@ -40,7 +42,6 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
     sku: '',
     stock: '',
     categoryId: '',
-    images: '',
     isActive: true,
   });
 
@@ -51,6 +52,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
     ]).then(([productData, categoriesData]) => {
       setProduct(productData);
       setCategories(categoriesData);
+      setImages(productData.images || []);
       setFormData({
         name: productData.name,
         slug: productData.slug,
@@ -61,7 +63,6 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         sku: productData.sku,
         stock: productData.stock.toString(),
         categoryId: productData.categoryId,
-        images: productData.images.join('\n'),
         isActive: productData.isActive,
       });
     });
@@ -80,7 +81,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
           price: parseFloat(formData.price),
           comparePrice: formData.comparePrice ? parseFloat(formData.comparePrice) : null,
           stock: parseInt(formData.stock),
-          images: formData.images.split('\n').filter((url) => url.trim()),
+          images: images,
         }),
       });
 
@@ -253,12 +254,10 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
           {/* Imagens */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">URLs das Imagens (uma por linha)</label>
-            <textarea
-              rows={3}
-              value={formData.images}
-              onChange={(e) => setFormData({ ...formData, images: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+            <ImageUpload
+              images={images}
+              onChange={setImages}
+              maxImages={5}
             />
           </div>
 
