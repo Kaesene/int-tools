@@ -77,20 +77,20 @@ export default async function AdminDashboard() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-        <div className="border border-gray-200 rounded-lg p-8">
-          <p className="text-base text-gray-600 mb-3">Receita</p>
+        <div className="border border-gray-200 rounded-lg p-10 text-center">
+          <p className="text-base text-gray-600 mb-4">Receita</p>
           <p className="text-5xl font-bold text-gray-900">R$ {stats.revenue.toFixed(0)}</p>
         </div>
-        <div className="border border-gray-200 rounded-lg p-8">
-          <p className="text-base text-gray-600 mb-3">Pedidos</p>
+        <div className="border border-gray-200 rounded-lg p-10 text-center">
+          <p className="text-base text-gray-600 mb-4">Pedidos</p>
           <p className="text-5xl font-bold text-gray-900">{stats.orders}</p>
         </div>
-        <div className="border border-gray-200 rounded-lg p-8">
-          <p className="text-base text-gray-600 mb-3">Produtos</p>
+        <div className="border border-gray-200 rounded-lg p-10 text-center">
+          <p className="text-base text-gray-600 mb-4">Produtos</p>
           <p className="text-5xl font-bold text-gray-900">{stats.products}</p>
         </div>
-        <div className="border border-gray-200 rounded-lg p-8">
-          <p className="text-base text-gray-600 mb-3">Categorias</p>
+        <div className="border border-gray-200 rounded-lg p-10 text-center">
+          <p className="text-base text-gray-600 mb-4">Categorias</p>
           <p className="text-5xl font-bold text-gray-900">{stats.categories}</p>
         </div>
       </div>
@@ -99,7 +99,7 @@ export default async function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Recent Products */}
         <div className="col-span-2 border border-gray-200 rounded-lg">
-          <div className="px-6 py-4 border-b border-gray-200">
+          <div className="px-8 py-6 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-900">Produtos Recentes</h2>
               <Link href="/admin/produtos" className="text-sm font-medium text-gray-900 hover:text-gray-600">
@@ -107,7 +107,7 @@ export default async function AdminDashboard() {
               </Link>
             </div>
           </div>
-          <div className="p-6">
+          <div className="p-8">
             {stats.recentProducts.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-gray-500">Nenhum produto ainda</p>
@@ -148,10 +148,10 @@ export default async function AdminDashboard() {
 
         {/* Low Stock */}
         <div className="border border-gray-200 rounded-lg">
-          <div className="px-6 py-4 border-b border-gray-200">
+          <div className="px-8 py-6 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900">Estoque Baixo</h2>
           </div>
-          <div className="p-6">
+          <div className="p-8">
             {stats.lowStockProducts.length === 0 ? (
               <p className="text-gray-500 text-sm">Nenhum produto com estoque baixo</p>
             ) : (
@@ -176,14 +176,14 @@ export default async function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <Link
           href="/admin/produtos"
-          className="border-2 border-gray-900 rounded-lg p-8 hover:bg-gray-900 hover:text-white transition-colors group"
+          className="border-2 border-gray-900 rounded-lg p-10 hover:bg-gray-900 hover:text-white transition-colors group"
         >
           <h3 className="text-xl font-semibold mb-2 group-hover:text-white">Gerenciar Produtos</h3>
           <p className="text-gray-600 group-hover:text-gray-300">Ver e editar todos os produtos</p>
         </Link>
         <Link
           href="/admin/pedidos"
-          className="border-2 border-gray-900 rounded-lg p-8 hover:bg-gray-900 hover:text-white transition-colors group"
+          className="border-2 border-gray-900 rounded-lg p-10 hover:bg-gray-900 hover:text-white transition-colors group"
         >
           <h3 className="text-xl font-semibold mb-2 group-hover:text-white">Ver Pedidos</h3>
           <p className="text-gray-600 group-hover:text-gray-300">Gerenciar todas as vendas</p>
