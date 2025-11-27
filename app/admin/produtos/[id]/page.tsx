@@ -133,7 +133,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-7xl mx-auto space-y-8">
+    <form onSubmit={handleSubmit} className="max-w-4xl mx-auto space-y-8">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
