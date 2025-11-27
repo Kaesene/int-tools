@@ -33,8 +33,8 @@ export default async function AdminLayout({
             </div>
           </div>
 
-          {/* Right - Fixed to right edge with 3px gap */}
-          <div className="flex items-center gap-4 pr-[3px]">
+          {/* Right - Fixed to right edge with comfortable gap */}
+          <div className="flex items-center gap-4 pr-6">
             <Link
               href="/admin/produtos/novo"
               className="px-4 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
