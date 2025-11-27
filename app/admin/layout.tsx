@@ -17,7 +17,7 @@ export default async function AdminLayout({
     <div className="min-h-screen bg-white">
       {/* Top Navigation - Ultra Clean */}
       <nav className="border-b border-gray-200 bg-white">
-        <div className="max-w-7xl mx-auto px-8">
+        <div className="px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo + Nav */}
             <div className="flex items-center gap-12">
@@ -59,7 +59,7 @@ export default async function AdminLayout({
       </nav>
 
       {/* Content */}
-      <main className="max-w-7xl mx-auto px-8 py-12">
+      <main className="px-8 py-12">
         {children}
       </main>
     </div>

@@ -76,27 +76,27 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-6">
-        <div className="border border-gray-200 rounded-lg p-6">
-          <p className="text-sm text-gray-600 mb-1">Receita</p>
-          <p className="text-3xl font-bold text-gray-900">R$ {stats.revenue.toFixed(0)}</p>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="border border-gray-200 rounded-lg p-8">
+          <p className="text-base text-gray-600 mb-3">Receita</p>
+          <p className="text-5xl font-bold text-gray-900">R$ {stats.revenue.toFixed(0)}</p>
         </div>
-        <div className="border border-gray-200 rounded-lg p-6">
-          <p className="text-sm text-gray-600 mb-1">Pedidos</p>
-          <p className="text-3xl font-bold text-gray-900">{stats.orders}</p>
+        <div className="border border-gray-200 rounded-lg p-8">
+          <p className="text-base text-gray-600 mb-3">Pedidos</p>
+          <p className="text-5xl font-bold text-gray-900">{stats.orders}</p>
         </div>
-        <div className="border border-gray-200 rounded-lg p-6">
-          <p className="text-sm text-gray-600 mb-1">Produtos</p>
-          <p className="text-3xl font-bold text-gray-900">{stats.products}</p>
+        <div className="border border-gray-200 rounded-lg p-8">
+          <p className="text-base text-gray-600 mb-3">Produtos</p>
+          <p className="text-5xl font-bold text-gray-900">{stats.products}</p>
         </div>
-        <div className="border border-gray-200 rounded-lg p-6">
-          <p className="text-sm text-gray-600 mb-1">Categorias</p>
-          <p className="text-3xl font-bold text-gray-900">{stats.categories}</p>
+        <div className="border border-gray-200 rounded-lg p-8">
+          <p className="text-base text-gray-600 mb-3">Categorias</p>
+          <p className="text-5xl font-bold text-gray-900">{stats.categories}</p>
         </div>
       </div>
 
       {/* Content Grid */}
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Recent Products */}
         <div className="col-span-2 border border-gray-200 rounded-lg">
           <div className="px-6 py-4 border-b border-gray-200">
@@ -173,7 +173,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <Link
           href="/admin/produtos"
           className="border-2 border-gray-900 rounded-lg p-8 hover:bg-gray-900 hover:text-white transition-colors group"
