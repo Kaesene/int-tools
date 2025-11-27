@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+import { StoreLayout } from "@/components/layout/StoreLayout";
 
 export const metadata: Metadata = {
   title: "INT Tools - Ferramentas e Tecnologia Importada",
@@ -17,11 +16,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className="flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-grow">
-          {children}
-        </main>
-        <Footer />
+        <StoreLayout>{children}</StoreLayout>
       </body>
     </html>
   );
