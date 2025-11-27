@@ -44,7 +44,7 @@ export default async function ProductsPage() {
 
       {/* Mini Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-lg p-6 border border-gray-200">
+        <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
               <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,7 +58,7 @@ export default async function ProductsPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg p-6 border border-gray-200">
+        <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
               <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -72,7 +72,7 @@ export default async function ProductsPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg p-6 border border-gray-200">
+        <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
               <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,7 +89,7 @@ export default async function ProductsPage() {
 
       {/* Products Grid */}
       {products.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-200 p-16 text-center">
+        <div className="bg-white rounded-lg shadow p-16 text-center">
           <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -115,7 +115,7 @@ export default async function ProductsPage() {
             <Link
               key={product.id}
               href={`/admin/produtos/${product.id}`}
-              className="group bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              className="group bg-white rounded-lg shadow overflow-hidden hover:shadow-lg transition-shadow"
             >
               {/* Image */}
               <div className="aspect-square bg-gray-100 overflow-hidden relative">

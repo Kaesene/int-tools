@@ -14,7 +14,7 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-50">
       {/* Top Navigation - Ultra Clean */}
       <nav className="border-b border-gray-200 bg-white">
         <div className="px-8">
