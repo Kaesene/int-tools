@@ -188,8 +188,7 @@ export default function NewProductPage() {
 
               <div>
                 <label className="block text-base font-semibold text-gray-700 mb-3">
-                  Preço Comparado
-                  <span className="ml-1 text-sm font-normal text-gray-500">(opcional)</span>
+                  Preço Comparado <span className="text-sm font-normal text-gray-500">(opcional)</span>
                 </label>
                 <div className="flex items-center gap-2">
                   <span className="text-base font-medium text-gray-700">R$</span>
