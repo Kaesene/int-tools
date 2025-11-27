@@ -20,13 +20,13 @@ export default async function AdminLayout({
         <div className="max-w-7xl mx-auto px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo + Nav */}
-            <div className="flex items-center gap-12">
-              <Link href="/admin" className="flex items-center gap-3">
+            <div className="flex items-center gap-8">
+              <Link href="/admin" className="flex items-center gap-2 flex-shrink-0">
                 <div className="w-8 h-8 bg-black rounded-lg"></div>
-                <span className="text-xl font-semibold text-gray-900">INT Tools</span>
+                <span className="text-lg font-bold text-gray-900">INT Tools</span>
               </Link>
 
-              <div className="flex items-center gap-8">
+              <div className="hidden md:flex items-center gap-6 ml-4">
                 <NavLink href="/admin" label="Home" />
                 <NavLink href="/admin/produtos" label="Produtos" />
                 <NavLink href="/admin/categorias" label="Categorias" />
