@@ -112,7 +112,7 @@ export default async function ProductsPage() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     SKU
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Preço
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -159,7 +159,7 @@ export default async function ProductsPage() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
                       {product.sku}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right font-semibold">
                       R$ {product.price.toFixed(2).replace('.', ',')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
