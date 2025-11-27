@@ -227,14 +227,14 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                   Preço de Venda <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-base font-medium text-gray-600">R$</span>
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-gray-500">R$</span>
                   <input
                     type="number"
                     step="0.01"
                     required
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    className="w-full pl-14 pr-4 py-3 text-base border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-colors"
+                    className="w-full pl-12 pr-4 py-3 text-base border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-colors"
                     placeholder="0,00"
                   />
                 </div>
@@ -246,13 +246,13 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                   <span className="ml-1 text-sm font-normal text-gray-500">(opcional)</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-base font-medium text-gray-600">R$</span>
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-gray-500">R$</span>
                   <input
                     type="number"
                     step="0.01"
                     value={formData.comparePrice}
                     onChange={(e) => setFormData({ ...formData, comparePrice: e.target.value })}
-                    className="w-full pl-14 pr-4 py-3 text-base border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-colors"
+                    className="w-full pl-12 pr-4 py-3 text-base border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-colors"
                     placeholder="0,00"
                   />
                 </div>
