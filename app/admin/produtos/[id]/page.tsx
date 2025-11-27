@@ -170,10 +170,8 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         </div>
       </div>
 
-      {/* Layout em 2 colunas */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Coluna principal - 2/3 */}
-        <div className="lg:col-span-2 space-y-6">
+      {/* Layout linear único */}
+      <div className="space-y-6">
           {/* Card: Informações básicas */}
           <div className="bg-white rounded-lg border border-gray-200 p-8">
             <h2 className="text-xl font-semibold text-gray-900 mb-8">Informações Básicas</h2>
@@ -295,52 +293,49 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Coluna lateral - 1/3 */}
-        <div className="space-y-6">
-          {/* Card: Status */}
+          {/* Card: Organização e Status */}
           <div className="bg-white rounded-lg border border-gray-200 p-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Status</h2>
-            <select
-              value={formData.isActive ? 'active' : 'draft'}
-              onChange={(e) => setFormData({ ...formData, isActive: e.target.value === 'active' })}
-              className="w-full px-4 py-3 text-base border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-gray-900 bg-white transition-colors"
-            >
-              <option value="active">Ativo (visível na loja)</option>
-              <option value="draft">Rascunho (oculto)</option>
-            </select>
-          </div>
+            <h2 className="text-xl font-semibold text-gray-900 mb-8">Organização e Status</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-3">
+                  Categoria <span className="text-red-500">*</span>
+                </label>
+                <select
+                  required
+                  value={formData.categoryId}
+                  onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+                  className="w-full px-4 py-3 text-base border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-gray-900 bg-white transition-colors"
+                >
+                  <option value="">Selecione uma categoria</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-          {/* Card: Organização */}
-          <div className="bg-white rounded-lg border border-gray-200 p-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Categoria</h2>
-            <div>
-              <label className="block text-base font-semibold text-gray-700 mb-3">
-                Categoria <span className="text-red-500">*</span>
-              </label>
-              <select
-                required
-                value={formData.categoryId}
-                onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                className="w-full px-4 py-3 text-base border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-gray-900 bg-white transition-colors"
-              >
-                <option value="">Selecione uma categoria</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
+              <div>
+                <label className="block text-base font-semibold text-gray-700 mb-3">
+                  Status <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={formData.isActive ? 'active' : 'draft'}
+                  onChange={(e) => setFormData({ ...formData, isActive: e.target.value === 'active' })}
+                  className="w-full px-4 py-3 text-base border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-gray-900 bg-white transition-colors"
+                >
+                  <option value="active">Ativo (visível na loja)</option>
+                  <option value="draft">Rascunho (oculto)</option>
+                </select>
+              </div>
             </div>
           </div>
 
           {/* Card: SEO */}
           <div className="bg-white rounded-lg border border-gray-200 p-8">
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">SEO</h2>
-              <p className="text-base text-gray-500 mt-2">URL amigável</p>
-            </div>
+            <h2 className="text-xl font-semibold text-gray-900 mb-8">SEO</h2>
             <div>
               <label className="block text-base font-semibold text-gray-700 mb-3">
                 URL do Produto <span className="text-red-500">*</span>
@@ -360,7 +355,6 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               </div>
             </div>
           </div>
-        </div>
       </div>
     </form>
   );
