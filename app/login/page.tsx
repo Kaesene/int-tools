@@ -56,15 +56,14 @@ export default function LoginPage() {
         </div>
 
         {/* Conteúdo */}
-        <div className="relative z-10 flex flex-col justify-center items-center px-16 text-white text-center">
-          <div className="mb-8">
-            <h1 className="text-5xl font-bold mb-4">INT Tools</h1>
-            <p className="text-xl text-gray-300 leading-relaxed">
+        <div className="relative z-10 w-full h-full flex flex-col justify-center items-center px-12 text-center">
+          <div className="max-w-md">
+            <h1 className="text-5xl font-bold mb-6 text-white">INT Tools</h1>
+            <p className="text-xl text-gray-300 leading-relaxed mb-12">
               Ferramentas e Tecnologia Importada de Alta Qualidade
             </p>
-          </div>
 
-          <div className="space-y-6 mt-8">
+            <div className="space-y-6">
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -99,6 +98,7 @@ export default function LoginPage() {
                 <h3 className="font-semibold text-lg mb-1">Checkout Rápido</h3>
                 <p className="text-gray-400">Finalize compras em segundos com seus dados salvos</p>
               </div>
+            </div>
             </div>
           </div>
         </div>
