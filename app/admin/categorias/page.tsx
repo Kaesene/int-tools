@@ -67,8 +67,8 @@ export default function CategoriesPage() {
   };
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-8">
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Categorias</h1>
           <p className="text-gray-600 mt-2">{categories.length} categoria(s) cadastrada(s)</p>
@@ -83,7 +83,7 @@ export default function CategoriesPage() {
 
       {/* Formulário */}
       {showForm && (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+        <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-lg font-bold mb-4">Nova Categoria</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -136,7 +136,7 @@ export default function CategoriesPage() {
       )}
 
       {/* Lista de Categorias */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-lg shadow overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>

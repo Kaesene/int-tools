@@ -32,14 +32,14 @@ export default async function OrdersPage() {
   const orders = await getOrders();
 
   return (
-    <div>
-      <div className="mb-8">
+    <div className="space-y-6">
+      <div>
         <h1 className="text-3xl font-bold text-gray-900">Pedidos</h1>
         <p className="text-gray-600 mt-2">{orders.length} pedido(s) cadastrado(s)</p>
       </div>
 
       {orders.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+        <div className="bg-white rounded-lg shadow p-12 text-center">
           <svg className="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
@@ -49,7 +49,7 @@ export default async function OrdersPage() {
       ) : (
         <div className="space-y-4">
           {orders.map((order) => (
-            <div key={order.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div key={order.id} className="bg-white rounded-lg shadow p-6">
               {/* Header do Pedido */}
               <div className="flex justify-between items-start mb-4 pb-4 border-b border-gray-200">
                 <div>
