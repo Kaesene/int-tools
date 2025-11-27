@@ -74,153 +74,85 @@ export default function NewProductPage() {
   };
 
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Novo Produto</h1>
-        <p className="text-gray-600 mt-2">Adicione um novo produto à loja</p>
+    <form onSubmit={handleSubmit}>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="p-2 hover:bg-gray-100 rounded-lg"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <h1 className="text-2xl font-semibold text-gray-900">Adicionar produto</h1>
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
+          >
+            Descartar
+          </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg disabled:opacity-50"
+          >
+            {loading ? 'Salvando...' : 'Salvar'}
+          </button>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Nome */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Nome do Produto *
-            </label>
-            <input
-              type="text"
-              required
-              value={formData.name}
-              onChange={(e) => {
-                setFormData({
-                  ...formData,
-                  name: e.target.value,
-                  slug: generateSlug(e.target.value),
-                });
-              }}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
-            />
+      {/* Layout em 2 colunas */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Coluna principal - 2/3 */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Card: Informações básicas */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 className="text-base font-semibold text-gray-900 mb-4">Informações básicas</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Título
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      name: e.target.value,
+                      slug: generateSlug(e.target.value),
+                    });
+                  }}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-green-600"
+                  placeholder="Nome do produto"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Descrição
+                </label>
+                <textarea
+                  rows={5}
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-green-600"
+                  placeholder="Descrição completa do produto"
+                />
+              </div>
+            </div>
           </div>
 
-          {/* Slug */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Slug (URL) *
-            </label>
-            <input
-              type="text"
-              required
-              value={formData.slug}
-              onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
-            />
-          </div>
-
-          {/* Descrição Curta */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Descrição Curta
-            </label>
-            <input
-              type="text"
-              value={formData.shortDescription}
-              onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
-            />
-          </div>
-
-          {/* Descrição */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Descrição Completa
-            </label>
-            <textarea
-              rows={4}
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
-            />
-          </div>
-
-          {/* Categoria */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Categoria *
-            </label>
-            <select
-              required
-              value={formData.categoryId}
-              onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
-            >
-              <option value="">Selecione...</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* SKU */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              SKU *
-            </label>
-            <input
-              type="text"
-              required
-              value={formData.sku}
-              onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
-            />
-          </div>
-
-          {/* Preço */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Preço (R$) *
-            </label>
-            <input
-              type="number"
-              step="0.01"
-              required
-              value={formData.price}
-              onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
-            />
-          </div>
-
-          {/* Preço Comparação */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Preço Anterior (R$)
-            </label>
-            <input
-              type="number"
-              step="0.01"
-              value={formData.comparePrice}
-              onChange={(e) => setFormData({ ...formData, comparePrice: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
-            />
-          </div>
-
-          {/* Estoque */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Estoque *
-            </label>
-            <input
-              type="number"
-              required
-              value={formData.stock}
-              onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
-            />
-          </div>
-
-          {/* Imagens */}
-          <div className="md:col-span-2">
+          {/* Card: Mídia */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 className="text-base font-semibold text-gray-900 mb-4">Mídia</h2>
             <ImageUpload
               images={images}
               onChange={setImages}
@@ -228,38 +160,144 @@ export default function NewProductPage() {
             />
           </div>
 
-          {/* Status */}
-          <div className="md:col-span-2">
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={formData.isActive}
-                onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                className="w-4 h-4 text-black border-gray-300 rounded focus:ring-black"
-              />
-              <span className="text-sm font-medium text-gray-700">Produto ativo</span>
-            </label>
+          {/* Card: Preços */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 className="text-base font-semibold text-gray-900 mb-4">Preços</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Preço
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">R$</span>
+                  <input
+                    type="number"
+                    step="0.01"
+                    required
+                    value={formData.price}
+                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                    className="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-green-600"
+                    placeholder="0,00"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Preço comparado
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">R$</span>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={formData.comparePrice}
+                    onChange={(e) => setFormData({ ...formData, comparePrice: e.target.value })}
+                    className="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-green-600"
+                    placeholder="0,00"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Card: Estoque */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 className="text-base font-semibold text-gray-900 mb-4">Estoque</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  SKU (Código)
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.sku}
+                  onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-green-600"
+                  placeholder="ABC-123"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Quantidade
+                </label>
+                <input
+                  type="number"
+                  required
+                  value={formData.stock}
+                  onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-green-600"
+                  placeholder="0"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Botões */}
-        <div className="flex gap-4 mt-6 pt-6 border-t border-gray-200">
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 disabled:opacity-50"
-          >
-            {loading ? 'Criando...' : 'Criar Produto'}
-          </button>
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300"
-          >
-            Cancelar
-          </button>
+        {/* Coluna lateral - 1/3 */}
+        <div className="space-y-6">
+          {/* Card: Status */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 className="text-base font-semibold text-gray-900 mb-4">Status</h2>
+            <select
+              value={formData.isActive ? 'active' : 'draft'}
+              onChange={(e) => setFormData({ ...formData, isActive: e.target.value === 'active' })}
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-green-600"
+            >
+              <option value="active">Ativo</option>
+              <option value="draft">Rascunho</option>
+            </select>
+          </div>
+
+          {/* Card: Organização */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 className="text-base font-semibold text-gray-900 mb-4">Organização</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Categoria
+                </label>
+                <select
+                  required
+                  value={formData.categoryId}
+                  onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-green-600"
+                >
+                  <option value="">Selecionar categoria</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Card: SEO */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 className="text-base font-semibold text-gray-900 mb-4">Otimização de mecanismos de busca</h2>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                URL
+              </label>
+              <input
+                type="text"
+                required
+                value={formData.slug}
+                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-green-600"
+                placeholder="produto-exemplo"
+              />
+              <p className="text-xs text-gray-500 mt-1.5">
+                int-tools.vercel.app/produto/{formData.slug || 'url'}
+              </p>
+            </div>
+          </div>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 }
