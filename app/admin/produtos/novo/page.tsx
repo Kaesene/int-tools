@@ -180,7 +180,7 @@ export default function NewProductPage() {
                     required
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    className="w-full pl-11 pr-4 py-3 text-base border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-colors"
+                    className="w-full pl-14 pr-4 py-3 text-base border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-colors"
                     placeholder="0,00"
                   />
                 </div>
@@ -198,7 +198,7 @@ export default function NewProductPage() {
                     step="0.01"
                     value={formData.comparePrice}
                     onChange={(e) => setFormData({ ...formData, comparePrice: e.target.value })}
-                    className="w-full pl-11 pr-4 py-3 text-base border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-colors"
+                    className="w-full pl-14 pr-4 py-3 text-base border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-colors"
                     placeholder="0,00"
                   />
                 </div>
