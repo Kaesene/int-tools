@@ -20,12 +20,12 @@ async function getOrders() {
 }
 
 const statusMap = {
-  PENDING: { label: 'Pendente', color: 'bg-yellow-100 text-yellow-800' },
-  PAID: { label: 'Pago', color: 'bg-green-100 text-green-800' },
-  PROCESSING: { label: 'Processando', color: 'bg-blue-100 text-blue-800' },
-  SHIPPED: { label: 'Enviado', color: 'bg-purple-100 text-purple-800' },
-  DELIVERED: { label: 'Entregue', color: 'bg-green-100 text-green-800' },
-  CANCELLED: { label: 'Cancelado', color: 'bg-red-100 text-red-800' },
+  PENDING: { label: 'Pendente', color: 'bg-gray-100 text-gray-800' },
+  PAID: { label: 'Pago', color: 'bg-gray-900 text-white' },
+  PROCESSING: { label: 'Processando', color: 'bg-gray-100 text-gray-800' },
+  SHIPPED: { label: 'Enviado', color: 'bg-gray-800 text-white' },
+  DELIVERED: { label: 'Entregue', color: 'bg-gray-900 text-white' },
+  CANCELLED: { label: 'Cancelado', color: 'bg-gray-200 text-gray-600' },
 };
 
 export default async function OrdersPage() {
