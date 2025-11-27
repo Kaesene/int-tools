@@ -61,12 +61,24 @@ export default function LoginPage() {
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-1">Gerenciamento Completo</h3>
-                <p className="text-gray-400">Controle total sobre produtos, pedidos e clientes</p>
+                <h3 className="font-semibold text-lg mb-1">Compre com Segurança</h3>
+                <p className="text-gray-400">Seus dados e pagamentos totalmente protegidos</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg mb-1">Acompanhe Pedidos</h3>
+                <p className="text-gray-400">Histórico completo de suas compras e rastreamento</p>
               </div>
             </div>
 
@@ -77,20 +89,8 @@ export default function LoginPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-1">Performance Otimizada</h3>
-                <p className="text-gray-400">Dashboard rápido e intuitivo</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg mb-1">Totalmente Seguro</h3>
-                <p className="text-gray-400">Autenticação e dados protegidos</p>
+                <h3 className="font-semibold text-lg mb-1">Checkout Rápido</h3>
+                <p className="text-gray-400">Finalize compras em segundos com seus dados salvos</p>
               </div>
             </div>
           </div>
@@ -112,7 +112,7 @@ export default function LoginPage() {
               Bem-vindo de volta
             </h2>
             <p className="text-gray-600">
-              Entre com suas credenciais para acessar o painel administrativo
+              Entre com suas credenciais para acessar sua conta
             </p>
           </div>
 
@@ -177,7 +177,7 @@ export default function LoginPage() {
                   Entrando...
                 </span>
               ) : (
-                'Entrar no Painel'
+                'Entrar'
               )}
             </button>
           </form>
