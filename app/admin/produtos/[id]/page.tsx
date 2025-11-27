@@ -221,7 +221,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
           {/* Card: Preços */}
           <div className="bg-white rounded-lg border border-gray-200 p-8">
             <h2 className="text-xl font-semibold text-gray-900 mb-8">Preços</h2>
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-base font-semibold text-gray-700 mb-3">
                   Preço de Venda <span className="text-red-500">*</span>
@@ -263,7 +263,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
           {/* Card: Estoque */}
           <div className="bg-white rounded-lg border border-gray-200 p-8">
             <h2 className="text-xl font-semibold text-gray-900 mb-8">Estoque e SKU</h2>
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-base font-semibold text-gray-700 mb-3">
                   Código SKU <span className="text-red-500">*</span>
