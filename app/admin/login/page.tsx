@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-export default function LoginPage() {
+export default function AdminLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,15 +27,7 @@ export default function LoginPage() {
       if (result?.error) {
         setError('Email ou senha incorretos');
       } else {
-        // Fetch session to get user role
-        const sessionRes = await fetch('/api/auth/session');
-        const session = await sessionRes.json();
-
-        if (session?.user?.role === 'ADMIN') {
-          router.push('/admin');
-        } else {
-          router.push('/');
-        }
+        router.push('/admin');
         router.refresh();
       }
     } catch (error) {
@@ -47,7 +39,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex">
-      {/* Lado Esquerdo - Branding */}
+      {/* Lado Esquerdo - Branding Admin */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-black via-gray-900 to-gray-800 relative overflow-hidden">
         {/* Pattern decorativo */}
         <div className="absolute inset-0 opacity-10">
@@ -56,48 +48,49 @@ export default function LoginPage() {
         </div>
 
         {/* Conteúdo */}
-        <div className="relative z-10 flex flex-col justify-center items-center px-16 text-white text-center">
-          <div className="mb-8">
+        <div className="relative z-10 flex flex-col justify-center px-16 text-white">
+          <div className="mb-12">
+            <div className="w-16 h-16 bg-white rounded-2xl mb-6"></div>
             <h1 className="text-5xl font-bold mb-4">INT Tools</h1>
             <p className="text-xl text-gray-300 leading-relaxed">
-              Ferramentas e Tecnologia Importada de Alta Qualidade
+              Painel Administrativo - Gerencie sua loja com eficiência
             </p>
           </div>
 
-          <div className="space-y-6 mt-8">
+          <div className="space-y-6 mt-12">
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-1">Compre com Segurança</h3>
-                <p className="text-gray-400">Seus dados e pagamentos totalmente protegidos</p>
+                <h3 className="font-semibold text-lg mb-1">Gerenciamento Completo</h3>
+                <p className="text-gray-400">Controle total sobre produtos, pedidos e clientes</p>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-1">Acompanhe Pedidos</h3>
-                <p className="text-gray-400">Histórico completo de suas compras e rastreamento</p>
+                <h3 className="font-semibold text-lg mb-1">Dashboard Analítico</h3>
+                <p className="text-gray-400">Estatísticas e métricas em tempo real</p>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                 </svg>
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-1">Checkout Rápido</h3>
-                <p className="text-gray-400">Finalize compras em segundos com seus dados salvos</p>
+                <h3 className="font-semibold text-lg mb-1">Controle Total</h3>
+                <p className="text-gray-400">Gestão de estoque, categorias e rastreamento</p>
               </div>
             </div>
           </div>
@@ -116,10 +109,10 @@ export default function LoginPage() {
           {/* Título */}
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-2">
-              Bem Vindo
+              Bem-vindo de volta
             </h2>
             <p className="text-gray-600">
-              Entre com suas credenciais para acessar sua conta
+              Entre com suas credenciais de administrador
             </p>
           </div>
 
@@ -149,7 +142,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-gray-900 placeholder-gray-400"
-                placeholder="seu@email.com"
+                placeholder="admin@int-tools.com"
               />
             </div>
 
@@ -184,7 +177,7 @@ export default function LoginPage() {
                   Entrando...
                 </span>
               ) : (
-                'Entrar'
+                'Entrar no Painel'
               )}
             </button>
           </form>
