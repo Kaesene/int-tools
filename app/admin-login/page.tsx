@@ -48,16 +48,15 @@ export default function AdminLoginPage() {
         </div>
 
         {/* Conteúdo */}
-        <div className="relative z-10 flex flex-col justify-center px-16 text-white">
-          <div className="mb-12">
-            <div className="w-16 h-16 bg-white rounded-2xl mb-6"></div>
-            <h1 className="text-5xl font-bold mb-4">INT Tools</h1>
-            <p className="text-xl text-gray-300 leading-relaxed">
+        <div className="relative z-10 w-full h-full flex flex-col justify-center items-center px-12 text-center text-white">
+          <div className="max-w-md">
+            <div className="w-16 h-16 bg-white rounded-2xl mb-6 mx-auto"></div>
+            <h1 className="text-5xl font-bold mb-6" style={{ color: '#FFFFFF' }}>INT Tools</h1>
+            <p className="text-xl text-gray-300 leading-relaxed mb-12">
               Painel Administrativo - Gerencie sua loja com eficiência
             </p>
-          </div>
 
-          <div className="space-y-6 mt-12">
+            <div className="space-y-6">
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,6 +91,7 @@ export default function AdminLoginPage() {
                 <h3 className="font-semibold text-lg mb-1">Controle Total</h3>
                 <p className="text-gray-400">Gestão de estoque, categorias e rastreamento</p>
               </div>
+            </div>
             </div>
           </div>
         </div>
