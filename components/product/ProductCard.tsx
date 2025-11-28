@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useCart } from '@/contexts/CartContext';
+import { useState } from 'react';
 import { Product } from '@/types';
 
 interface ProductCardProps {
@@ -9,10 +12,49 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const router = useRouter();
+  const { addItem } = useCart();
+  const [isAdding, setIsAdding] = useState(false);
+
   const hasDiscount = product.comparePrice && product.comparePrice > product.price;
   const discountPercent = hasDiscount
     ? Math.round(((product.comparePrice! - product.price) / product.comparePrice!) * 100)
     : 0;
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setIsAdding(true);
+    addItem({
+      id: product.id,
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      slug: product.slug,
+      stock: product.stock,
+      image: product.images?.[0] || null,
+    });
+
+    setTimeout(() => setIsAdding(false), 1500);
+  };
+
+  const handleBuyNow = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    addItem({
+      id: product.id,
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      slug: product.slug,
+      stock: product.stock,
+      image: product.images?.[0] || null,
+    });
+
+    router.push('/checkout');
+  };
 
   return (
     <Link href={`/produto/${product.slug}`} className="group">
@@ -115,18 +157,34 @@ export function ProductCard({ product }: ProductCardProps) {
             </div>
           </div>
 
-          {/* Add to Cart Button */}
-          <button
-            className="mt-4 w-full bg-[var(--primary)] text-white py-2 rounded-lg hover:bg-[var(--primary-dark)] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={product.stock === 0}
-            onClick={(e) => {
-              e.preventDefault();
-              // TODO: Adicionar ao carrinho
-              console.log('Adicionar ao carrinho:', product.id);
-            }}
-          >
-            {product.stock === 0 ? 'Esgotado' : 'Adicionar ao Carrinho'}
-          </button>
+          {/* Action Buttons */}
+          <div className="mt-4 flex gap-2">
+            <button
+              className="flex-1 bg-white border-2 border-black text-black py-2 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+              disabled={product.stock === 0 || isAdding}
+              onClick={handleAddToCart}
+            >
+              {isAdding ? (
+                <span className="flex items-center justify-center gap-1">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  Adicionado
+                </span>
+              ) : product.stock === 0 ? (
+                'Esgotado'
+              ) : (
+                '+ Carrinho'
+              )}
+            </button>
+            <button
+              className="flex-1 bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+              disabled={product.stock === 0}
+              onClick={handleBuyNow}
+            >
+              Comprar
+            </button>
+          </div>
         </div>
       </div>
     </Link>
