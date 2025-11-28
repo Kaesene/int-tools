@@ -71,7 +71,7 @@ export default function LoginPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-1 text-white">Compre com Segurança</h3>
+                <h3 className="font-semibold text-lg mb-1" style={{ color: '#FFFFFF' }}>Compre com Segurança</h3>
                 <p className="text-gray-400">Seus dados e pagamentos totalmente protegidos</p>
               </div>
             </div>
@@ -83,7 +83,7 @@ export default function LoginPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-1 text-white">Acompanhe Pedidos</h3>
+                <h3 className="font-semibold text-lg mb-1" style={{ color: '#FFFFFF' }}>Acompanhe Pedidos</h3>
                 <p className="text-gray-400">Histórico completo de suas compras e rastreamento</p>
               </div>
             </div>
@@ -95,7 +95,7 @@ export default function LoginPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-1 text-white">Checkout Rápido</h3>
+                <h3 className="font-semibold text-lg mb-1" style={{ color: '#FFFFFF' }}>Checkout Rápido</h3>
                 <p className="text-gray-400">Finalize compras em segundos com seus dados salvos</p>
               </div>
             </div>

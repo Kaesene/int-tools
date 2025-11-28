@@ -63,7 +63,7 @@ export default function AdminLoginPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-1 text-white">Gerenciamento Completo</h3>
+                <h3 className="font-semibold text-lg mb-1" style={{ color: '#FFFFFF' }}>Gerenciamento Completo</h3>
                 <p className="text-gray-400">Controle total sobre produtos, pedidos e clientes</p>
               </div>
             </div>
@@ -75,7 +75,7 @@ export default function AdminLoginPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-1 text-white">Dashboard Analítico</h3>
+                <h3 className="font-semibold text-lg mb-1" style={{ color: '#FFFFFF' }}>Dashboard Analítico</h3>
                 <p className="text-gray-400">Estatísticas e métricas em tempo real</p>
               </div>
             </div>
@@ -87,7 +87,7 @@ export default function AdminLoginPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-1 text-white">Controle Total</h3>
+                <h3 className="font-semibold text-lg mb-1" style={{ color: '#FFFFFF' }}>Controle Total</h3>
                 <p className="text-gray-400">Gestão de estoque, categorias e rastreamento</p>
               </div>
             </div>
