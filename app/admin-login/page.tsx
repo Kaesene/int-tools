@@ -50,7 +50,6 @@ export default function AdminLoginPage() {
         {/* Conteúdo */}
         <div className="relative z-10 w-full h-full flex flex-col justify-center items-center px-12 text-center text-white">
           <div className="max-w-md">
-            <div className="w-16 h-16 bg-white rounded-2xl mb-6 mx-auto"></div>
             <h1 className="text-5xl font-bold mb-6" style={{ color: '#FFFFFF' }}>INT Tools</h1>
             <p className="text-xl text-gray-300 leading-relaxed mb-12">
               Painel Administrativo - Gerencie sua loja com eficiência
@@ -64,7 +63,7 @@ export default function AdminLoginPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-1">Gerenciamento Completo</h3>
+                <h3 className="font-semibold text-lg mb-1 text-white">Gerenciamento Completo</h3>
                 <p className="text-gray-400">Controle total sobre produtos, pedidos e clientes</p>
               </div>
             </div>
@@ -76,7 +75,7 @@ export default function AdminLoginPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-1">Dashboard Analítico</h3>
+                <h3 className="font-semibold text-lg mb-1 text-white">Dashboard Analítico</h3>
                 <p className="text-gray-400">Estatísticas e métricas em tempo real</p>
               </div>
             </div>
@@ -88,7 +87,7 @@ export default function AdminLoginPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-1">Controle Total</h3>
+                <h3 className="font-semibold text-lg mb-1 text-white">Controle Total</h3>
                 <p className="text-gray-400">Gestão de estoque, categorias e rastreamento</p>
               </div>
             </div>
