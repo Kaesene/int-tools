@@ -1,23 +1,51 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { signIn } from 'next-auth/react';
 
-export default function LoginPage() {
+export default function CadastroPage() {
   const router = useRouter();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    // Validações
+    if (password !== confirmPassword) {
+      setError('As senhas não coincidem');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('A senha deve ter pelo menos 6 caracteres');
+      return;
+    }
+
     setLoading(true);
 
     try {
+      // Registrar usuário
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Erro ao criar conta');
+      }
+
+      // Login automático após cadastro
       const result = await signIn('credentials', {
         email,
         password,
@@ -25,9 +53,10 @@ export default function LoginPage() {
       });
 
       if (result?.error) {
-        setError('Email ou senha incorretos');
+        setError('Conta criada! Redirecionando para login...');
+        setTimeout(() => router.push('/login'), 2000);
       } else {
-        // Fetch session to get user role
+        // Redirect baseado no role
         const sessionRes = await fetch('/api/auth/session');
         const session = await sessionRes.json();
 
@@ -38,8 +67,8 @@ export default function LoginPage() {
         }
         router.refresh();
       }
-    } catch (error) {
-      setError('Erro ao fazer login');
+    } catch (err: any) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -64,41 +93,41 @@ export default function LoginPage() {
             </p>
 
             <div className="space-y-6">
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                </svg>
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-1" style={{ color: '#FFFFFF' }}>Compre com Segurança</h3>
+                  <p className="text-gray-400">Seus dados e pagamentos totalmente protegidos</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold text-lg mb-1" style={{ color: '#FFFFFF' }}>Compre com Segurança</h3>
-                <p className="text-gray-400">Seus dados e pagamentos totalmente protegidos</p>
-              </div>
-            </div>
 
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
-                </svg>
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-1" style={{ color: '#FFFFFF' }}>Acompanhe Pedidos</h3>
+                  <p className="text-gray-400">Histórico completo de suas compras e rastreamento</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold text-lg mb-1" style={{ color: '#FFFFFF' }}>Acompanhe Pedidos</h3>
-                <p className="text-gray-400">Histórico completo de suas compras e rastreamento</p>
-              </div>
-            </div>
 
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-1" style={{ color: '#FFFFFF' }}>Checkout Rápido</h3>
+                  <p className="text-gray-400">Finalize compras em segundos com seus dados salvos</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold text-lg mb-1" style={{ color: '#FFFFFF' }}>Checkout Rápido</h3>
-                <p className="text-gray-400">Finalize compras em segundos com seus dados salvos</p>
-              </div>
-            </div>
             </div>
           </div>
         </div>
@@ -116,10 +145,10 @@ export default function LoginPage() {
           {/* Título */}
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-2">
-              Bem Vindo
+              Criar Conta
             </h2>
             <p className="text-gray-600">
-              Entre com suas credenciais para acessar sua conta
+              Preencha seus dados para começar a comprar
             </p>
           </div>
 
@@ -135,6 +164,23 @@ export default function LoginPage() {
                 </div>
               </div>
             )}
+
+            <div>
+              <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
+                Nome Completo
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                autoComplete="name"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-gray-900 placeholder-gray-400"
+                placeholder="João Silva"
+              />
+            </div>
 
             <div>
               <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
@@ -161,12 +207,29 @@ export default function LoginPage() {
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-gray-900 placeholder-gray-400"
-                placeholder="••••••••"
+                placeholder="Mínimo 6 caracteres"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-2">
+                Confirmar Senha
+              </label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                autoComplete="new-password"
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-gray-900 placeholder-gray-400"
+                placeholder="Digite a senha novamente"
               />
             </div>
 
@@ -181,34 +244,25 @@ export default function LoginPage() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Entrando...
+                  Criando conta...
                 </span>
               ) : (
-                'Entrar'
+                'Criar Conta'
               )}
             </button>
           </form>
 
           {/* Footer */}
-          <div className="mt-8 text-center space-y-4">
+          <div className="mt-8 text-center">
             <p className="text-sm text-gray-600">
-              Não tem uma conta?{' '}
+              Já tem uma conta?{' '}
               <Link
-                href="/cadastro"
+                href="/login"
                 className="font-semibold text-black hover:text-gray-700 transition-colors"
               >
-                Criar conta
+                Entrar
               </Link>
             </p>
-            <Link
-              href="/"
-              className="inline-flex items-center text-sm text-gray-600 hover:text-black transition-colors"
-            >
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              Voltar para a loja
-            </Link>
           </div>
         </div>
       </div>
