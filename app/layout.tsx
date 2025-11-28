@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { StoreLayout } from "@/components/layout/StoreLayout";
-import { CartProvider } from "@/contexts/CartContext";
+import { Providers } from "@/components/Providers";
 
 export const metadata: Metadata = {
   title: "INT Tools - Ferramentas e Tecnologia Importada",
@@ -17,9 +17,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className="flex flex-col min-h-screen">
-        <CartProvider>
+        <Providers>
           <StoreLayout>{children}</StoreLayout>
-        </CartProvider>
+        </Providers>
       </body>
     </html>
   );
