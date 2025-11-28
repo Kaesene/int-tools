@@ -39,6 +39,20 @@ export default function PerfilPage() {
   const [cpf, setCpf] = useState('');
   const [phone, setPhone] = useState('');
 
+  // Address form state
+  const [isAddingAddress, setIsAddingAddress] = useState(false);
+  const [addressForm, setAddressForm] = useState({
+    name: '',
+    zipCode: '',
+    street: '',
+    number: '',
+    complement: '',
+    neighborhood: '',
+    city: '',
+    state: '',
+    isDefault: false,
+  });
+
   useEffect(() => {
     if (status === 'loading') return;
 
@@ -127,6 +141,60 @@ export default function PerfilPage() {
     return value;
   };
 
+  const formatZipCode = (value: string) => {
+    const numbers = value.replace(/\D/g, '');
+    if (numbers.length <= 8) {
+      return numbers.replace(/(\d{5})(\d)/, '$1-$2');
+    }
+    return value;
+  };
+
+  const handleAddAddress = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+    setSaving(true);
+
+    try {
+      const res = await fetch('/api/user/addresses', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(addressForm),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Erro ao adicionar endereço');
+      }
+
+      setSuccess('Endereço adicionado com sucesso!');
+      setIsAddingAddress(false);
+      setAddressForm({
+        name: '',
+        zipCode: '',
+        street: '',
+        number: '',
+        complement: '',
+        neighborhood: '',
+        city: '',
+        state: '',
+        isDefault: false,
+      });
+
+      // Refresh profile data
+      const refreshRes = await fetch('/api/user/profile');
+      const refreshData = await refreshRes.json();
+      setProfile(refreshData);
+
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   if (loading || status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -139,9 +207,8 @@ export default function PerfilPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
+    <div className="w-full flex justify-center px-8 py-12">
+      <div className="w-full max-w-7xl space-y-6">
         {/* Header */}
         <div className="mb-8">
           <Link
@@ -270,7 +337,10 @@ export default function PerfilPage() {
         <div className="bg-white rounded-lg shadow-sm p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-gray-900">Endereços</h2>
-            <button className="text-sm font-semibold text-black hover:text-gray-700 transition-colors">
+            <button
+              onClick={() => setIsAddingAddress(true)}
+              className="text-sm font-semibold text-black hover:text-gray-700 transition-colors"
+            >
               + Adicionar Endereço
             </button>
           </div>
@@ -315,13 +385,187 @@ export default function PerfilPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
               <p className="text-gray-500 mb-4">Você ainda não cadastrou nenhum endereço</p>
-              <button className="text-sm font-semibold text-black hover:text-gray-700 transition-colors">
+              <button
+                onClick={() => setIsAddingAddress(true)}
+                className="text-sm font-semibold text-black hover:text-gray-700 transition-colors"
+              >
                 Adicionar primeiro endereço
               </button>
             </div>
           )}
         </div>
-        </div>
+
+        {/* Add Address Modal */}
+        {isAddingAddress && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900">Adicionar Endereço</h2>
+                  <button
+                    onClick={() => setIsAddingAddress(false)}
+                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <form onSubmit={handleAddAddress} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Nome do Endereço (ex: Casa, Trabalho) *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={addressForm.name}
+                      onChange={(e) => setAddressForm({ ...addressForm, name: e.target.value })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-gray-900"
+                      placeholder="Casa"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        CEP *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={addressForm.zipCode}
+                        onChange={(e) => setAddressForm({ ...addressForm, zipCode: formatZipCode(e.target.value) })}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-gray-900"
+                        placeholder="00000-000"
+                        maxLength={9}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Estado *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={addressForm.state}
+                        onChange={(e) => setAddressForm({ ...addressForm, state: e.target.value.toUpperCase() })}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-gray-900"
+                        placeholder="SP"
+                        maxLength={2}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Rua/Avenida *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={addressForm.street}
+                      onChange={(e) => setAddressForm({ ...addressForm, street: e.target.value })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-gray-900"
+                      placeholder="Rua das Flores"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Número *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={addressForm.number}
+                        onChange={(e) => setAddressForm({ ...addressForm, number: e.target.value })}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-gray-900"
+                        placeholder="123"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Complemento
+                      </label>
+                      <input
+                        type="text"
+                        value={addressForm.complement}
+                        onChange={(e) => setAddressForm({ ...addressForm, complement: e.target.value })}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-gray-900"
+                        placeholder="Apto 45"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Bairro *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={addressForm.neighborhood}
+                        onChange={(e) => setAddressForm({ ...addressForm, neighborhood: e.target.value })}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-gray-900"
+                        placeholder="Centro"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Cidade *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={addressForm.city}
+                        onChange={(e) => setAddressForm({ ...addressForm, city: e.target.value })}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-gray-900"
+                        placeholder="São Paulo"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="isDefault"
+                      checked={addressForm.isDefault}
+                      onChange={(e) => setAddressForm({ ...addressForm, isDefault: e.target.checked })}
+                      className="w-4 h-4 text-black border-gray-300 rounded focus:ring-black"
+                    />
+                    <label htmlFor="isDefault" className="text-sm text-gray-700">
+                      Definir como endereço padrão
+                    </label>
+                  </div>
+
+                  <div className="flex gap-3 pt-4">
+                    <button
+                      type="button"
+                      onClick={() => setIsAddingAddress(false)}
+                      className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={saving}
+                      className="flex-1 bg-black text-white py-3 px-4 rounded-lg font-semibold hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                    >
+                      {saving ? 'Salvando...' : 'Salvar Endereço'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
