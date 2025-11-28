@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ImageGallery } from '@/components/product/ImageGallery';
+import { AddToCartButton } from '@/components/product/AddToCartButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -106,12 +107,16 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             )}
 
             {/* Botão Comprar */}
-            <button
-              disabled={product.stock === 0}
-              className="w-full bg-black text-white py-4 px-8 rounded-lg font-medium text-lg hover:bg-gray-800 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed mb-4"
-            >
-              {product.stock === 0 ? 'Produto Esgotado' : 'Adicionar ao Carrinho'}
-            </button>
+            <AddToCartButton
+              product={{
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                slug: product.slug,
+                stock: product.stock,
+                images: product.images || [],
+              }}
+            />
 
             {/* Descrição Completa */}
             {product.description && (
