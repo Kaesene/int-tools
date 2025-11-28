@@ -56,9 +56,9 @@ export default function LoginPage() {
         </div>
 
         {/* Conteúdo */}
-        <div className="relative z-10 w-full h-full flex flex-col justify-center items-center px-12 text-center">
+        <div className="relative z-10 w-full h-full flex flex-col justify-center items-center px-12 text-center text-white">
           <div className="max-w-md">
-            <h1 className="text-5xl font-bold mb-6 text-white">INT Tools</h1>
+            <h1 className="text-5xl font-bold mb-6" style={{ color: '#FFFFFF' }}>INT Tools</h1>
             <p className="text-xl text-gray-300 leading-relaxed mb-12">
               Ferramentas e Tecnologia Importada de Alta Qualidade
             </p>
