@@ -17,6 +17,10 @@ model User {
   image         String?
   role          UserRole  @default(CUSTOMER)
 
+  // Dados adicionais do perfil
+  cpf           String?
+  phone         String?
+
   // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
