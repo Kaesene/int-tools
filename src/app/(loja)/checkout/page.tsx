@@ -110,7 +110,7 @@ export default function CheckoutPage() {
           items: items.map((item) => ({
             productId: item.id,
             productName: item.name,
-            productImage: item.thumbnail,
+            productImage: item.thumbnail || '/placeholder.png',
             quantity: item.quantity,
             price: item.price,
           })),
