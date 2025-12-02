@@ -109,13 +109,24 @@ export async function POST(request: NextRequest) {
         shippingState,
         shippingZipCode,
         items: {
-          create: items.map((item: any) => ({
-            productId: Number(item.productId),
-            productName: item.productName,
-            productImage: item.productImage || null,
-            quantity: Number(item.quantity),
-            price: Number(item.price),
-          })),
+          create: items.map((item: any) => {
+            const productId = parseInt(item.productId)
+            console.log('🔗 Creating order item:', {
+              productId,
+              originalId: item.productId,
+              isValidId: !isNaN(productId)
+            })
+
+            return {
+              product: {
+                connect: { id: productId }
+              },
+              productName: item.productName,
+              productImage: item.productImage || null,
+              quantity: Number(item.quantity),
+              price: Number(item.price),
+            }
+          }),
         },
       },
       include: {
