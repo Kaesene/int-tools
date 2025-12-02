@@ -1,0 +1,31 @@
+'use client'
+
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { useClientAuth } from '@/contexts/ClientAuthContext'
+import { Loading } from '@/components/ui/Loading'
+
+export function ClientGuard({ children }: { children: React.ReactNode }) {
+  const router = useRouter()
+  const { user, isLoading } = useClientAuth()
+
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.push('/login')
+    }
+  }, [user, isLoading, router])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loading />
+      </div>
+    )
+  }
+
+  if (!user) {
+    return null
+  }
+
+  return <>{children}</>
+}
