@@ -33,7 +33,7 @@ interface Address {
 
 export default function CheckoutPage() {
   const { user, isLoading: authLoading } = useClientAuth()
-  const { items, total, clearCart } = useCart()
+  const { items, totalPrice: total, clearCart } = useCart()
   const router = useRouter()
 
   const [addresses, setAddresses] = useState<Address[]>([])
