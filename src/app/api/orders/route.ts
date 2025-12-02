@@ -10,9 +10,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'userId is required' }, { status: 400 })
     }
 
+    console.log('🔍 Fetching orders for userId:', userId)
+
     const orders = await prisma.order.findMany({
       where: {
-        userId,
+        userId: userId,
       },
       include: {
         items: {
@@ -91,28 +93,28 @@ export async function POST(request: NextRequest) {
       data: {
         orderNumber,
         userId,
-        addressId,
-        subtotal,
-        shippingCost: shippingCost || 0,
-        discount: discount || 0,
-        total,
+        addressId: addressId || null,
+        subtotal: Number(subtotal),
+        shippingCost: Number(shippingCost || 0),
+        discount: Number(discount || 0),
+        total: Number(total),
         status: 'pending',
         paymentStatus: 'pending',
         shippingName,
         shippingStreet,
         shippingNumber,
-        shippingComplement,
+        shippingComplement: shippingComplement || null,
         shippingNeighborhood,
         shippingCity,
         shippingState,
         shippingZipCode,
         items: {
           create: items.map((item: any) => ({
-            productId: item.productId,
+            productId: Number(item.productId),
             productName: item.productName,
-            productImage: item.productImage,
-            quantity: item.quantity,
-            price: item.price,
+            productImage: item.productImage || null,
+            quantity: Number(item.quantity),
+            price: Number(item.price),
           })),
         },
       },
