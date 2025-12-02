@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
+import { supabase } from '@/lib/supabase'
 
 interface AdminAuthContextData {
   isAuthenticated: boolean
@@ -21,33 +22,69 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Check if admin is logged in
-    const adminData = localStorage.getItem('admin_auth')
-    if (adminData) {
-      try {
-        const parsed = JSON.parse(adminData)
-        setAdminUser(parsed)
-        setIsAuthenticated(true)
-      } catch (error) {
-        localStorage.removeItem('admin_auth')
+    const checkAuth = async () => {
+      const adminData = localStorage.getItem('admin_auth')
+      if (adminData) {
+        try {
+          const parsed = JSON.parse(adminData)
+          setAdminUser(parsed)
+          setIsAuthenticated(true)
+        } catch (error) {
+          localStorage.removeItem('admin_auth')
+        }
       }
+      setIsLoading(false)
     }
-    setIsLoading(false)
+    checkAuth()
   }, [])
 
   const login = async (email: string, password: string): Promise<boolean> => {
-    // TODO: Implementar autenticação real com Supabase
-    // Por enquanto, login simples para desenvolvimento
-    if (email === 'admin@inttools.com' && password === 'admin123') {
-      const userData = {
+    try {
+      // 1. Fazer login no Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email,
-        name: 'Administrador',
+        password,
+      })
+
+      if (authError || !authData.user) {
+        console.error('Erro de autenticação:', authError?.message)
+        return false
       }
-      localStorage.setItem('admin_auth', JSON.stringify(userData))
-      setAdminUser(userData)
+
+      // 2. Verificar se o usuário é admin
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', authData.user.id)
+        .single()
+
+      if (userError || !userData) {
+        console.error('Erro ao buscar usuário:', userError?.message)
+        await supabase.auth.signOut()
+        return false
+      }
+
+      // 3. Verificar se is_admin = true
+      if (!userData.is_admin) {
+        console.error('Usuário não é admin')
+        await supabase.auth.signOut()
+        return false
+      }
+
+      // 4. Autenticado como admin!
+      const adminUserData = {
+        email: userData.email,
+        name: userData.name || 'Admin',
+      }
+
+      localStorage.setItem('admin_auth', JSON.stringify(adminUserData))
+      setAdminUser(adminUserData)
       setIsAuthenticated(true)
       return true
+    } catch (error) {
+      console.error('Erro no login:', error)
+      return false
     }
-    return false
   }
 
   const logout = () => {
