@@ -15,6 +15,7 @@ import {
   FiShoppingBag,
   FiAlertCircle,
   FiCheck,
+  FiTruck,
 } from 'react-icons/fi'
 import Link from 'next/link'
 
@@ -31,6 +32,17 @@ interface Address {
   isDefault: boolean
 }
 
+interface ShippingOption {
+  id: string
+  name: string
+  price: number
+  delivery_time: number
+  company: {
+    name: string
+    picture: string
+  }
+}
+
 export default function CheckoutPage() {
   const { user, isLoading: authLoading } = useClientAuth()
   const { items, totalPrice: total, clearCart } = useCart()
@@ -42,6 +54,11 @@ export default function CheckoutPage() {
   const [showAddressForm, setShowAddressForm] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [error, setError] = useState('')
+
+  // Shipping states
+  const [shippingOptions, setShippingOptions] = useState<ShippingOption[]>([])
+  const [selectedShipping, setSelectedShipping] = useState<ShippingOption | null>(null)
+  const [isLoadingShipping, setIsLoadingShipping] = useState(false)
 
   // Redirecionar se não estiver logado
   useEffect(() => {
@@ -82,9 +99,81 @@ export default function CheckoutPage() {
     }
   }
 
+  // Calcular frete quando endereço é selecionado
+  useEffect(() => {
+    if (selectedAddressId && addresses.length > 0) {
+      const address = addresses.find((addr) => addr.id === selectedAddressId)
+      if (address) {
+        calculateShipping(address.zipCode)
+      }
+    }
+  }, [selectedAddressId, addresses])
+
+  const calculateShipping = async (zipCode: string) => {
+    if (items.length === 0) return
+
+    setIsLoadingShipping(true)
+    setError('')
+
+    try {
+      const response = await fetch('/api/shipping/calculate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          zipCode,
+          items: items.map((item) => ({
+            productId: item.id,
+            quantity: item.quantity,
+          })),
+        }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setShippingOptions(data.options || [])
+
+        // Selecionar a primeira opção automaticamente (geralmente a mais barata)
+        if (data.options && data.options.length > 0) {
+          setSelectedShipping(data.options[0])
+        }
+      } else {
+        console.error('Erro ao calcular frete')
+        // Fallback: frete grátis em caso de erro
+        const fallbackOption: ShippingOption = {
+          id: 'free',
+          name: 'Frete Gratis',
+          price: 0,
+          delivery_time: 7,
+          company: { name: 'Frete Gratis', picture: '' },
+        }
+        setShippingOptions([fallbackOption])
+        setSelectedShipping(fallbackOption)
+      }
+    } catch (error) {
+      console.error('Erro ao calcular frete:', error)
+      // Fallback: frete grátis em caso de erro
+      const fallbackOption: ShippingOption = {
+        id: 'free',
+        name: 'Frete Gratis',
+        price: 0,
+        delivery_time: 7,
+        company: { name: 'Frete Gratis', picture: '' },
+      }
+      setShippingOptions([fallbackOption])
+      setSelectedShipping(fallbackOption)
+    } finally {
+      setIsLoadingShipping(false)
+    }
+  }
+
   const handleFinishOrder = async () => {
     if (!selectedAddressId) {
       setError('Por favor, selecione um endereço de entrega')
+      return
+    }
+
+    if (!selectedShipping) {
+      setError('Por favor, aguarde o calculo do frete')
       return
     }
 
@@ -101,6 +190,9 @@ export default function CheckoutPage() {
       const selectedAddress = addresses.find((addr) => addr.id === selectedAddressId)
       if (!selectedAddress) throw new Error('Endereço não encontrado')
 
+      const shippingCost = selectedShipping.price
+      const orderTotal = total + shippingCost
+
       const orderResponse = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -115,9 +207,9 @@ export default function CheckoutPage() {
             price: item.price,
           })),
           subtotal: total,
-          shippingCost: 0,
+          shippingCost: shippingCost,
           discount: 0,
-          total: total,
+          total: orderTotal,
           shippingName: selectedAddress.name,
           shippingStreet: selectedAddress.street,
           shippingNumber: selectedAddress.number,
@@ -126,6 +218,7 @@ export default function CheckoutPage() {
           shippingCity: selectedAddress.city,
           shippingState: selectedAddress.state,
           shippingZipCode: selectedAddress.zipCode,
+          shippingMethod: selectedShipping.name,
         }),
       })
 
@@ -149,7 +242,8 @@ export default function CheckoutPage() {
             quantity: item.quantity,
             price: item.price,
           })),
-          total,
+          shippingCost,
+          total: orderTotal,
           payer: {
             name: user?.user_metadata?.name || user?.email,
             email: user?.email,
@@ -290,6 +384,61 @@ export default function CheckoutPage() {
             )}
           </div>
 
+          {/* Shipping Options */}
+          {selectedAddressId && (
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <FiTruck size={24} />
+                Forma de Entrega
+              </h2>
+
+              {isLoadingShipping ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
+                  <span className="ml-3 text-gray-600">Calculando frete...</span>
+                </div>
+              ) : shippingOptions.length > 0 ? (
+                <div className="space-y-3">
+                  {shippingOptions.map((option) => (
+                    <label
+                      key={option.id}
+                      className={`block p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                        selectedShipping?.id === option.id
+                          ? 'border-primary-500 bg-primary-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          name="shipping"
+                          checked={selectedShipping?.id === option.id}
+                          onChange={() => setSelectedShipping(option)}
+                          className="mt-1"
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="font-semibold text-gray-900">{option.name}</span>
+                            <span className="text-lg font-bold text-primary-600">
+                              {option.price === 0 ? 'GRATIS' : formatPrice(option.price)}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-600">
+                            {option.company.name} - Entrega em ate {option.delivery_time} dias uteis
+                          </p>
+                        </div>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-600 text-center py-4">
+                  Selecione um endereco para calcular o frete
+                </p>
+              )}
+            </div>
+          )}
+
           {/* Payment Method */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
@@ -339,11 +488,21 @@ export default function CheckoutPage() {
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Frete:</span>
-                <span className="font-medium text-green-600">GRÁTIS</span>
+                {isLoadingShipping ? (
+                  <span className="text-gray-400">Calculando...</span>
+                ) : selectedShipping ? (
+                  <span className={`font-medium ${selectedShipping.price === 0 ? 'text-green-600' : ''}`}>
+                    {selectedShipping.price === 0 ? 'GRATIS' : formatPrice(selectedShipping.price)}
+                  </span>
+                ) : (
+                  <span className="text-gray-400">-</span>
+                )}
               </div>
               <div className="border-t pt-2 flex justify-between items-center">
                 <span className="font-semibold text-gray-900">Total:</span>
-                <span className="text-2xl font-bold text-primary-600">{formatPrice(total)}</span>
+                <span className="text-2xl font-bold text-primary-600">
+                  {formatPrice(total + (selectedShipping?.price || 0))}
+                </span>
               </div>
             </div>
 
