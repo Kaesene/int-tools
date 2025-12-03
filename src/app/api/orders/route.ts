@@ -83,15 +83,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    // Gerar número do pedido único
-    const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substring(7).toUpperCase()}`
-    console.log('🎯 Order number generated:', orderNumber)
-
-    // Criar pedido com items
+    // Criar pedido com items (orderNumber temporário)
     console.log('💾 Creating order in database...')
     const order = await prisma.order.create({
       data: {
-        orderNumber,
+        orderNumber: 'TEMP', // Temporário, será atualizado
         userId,
         addressId: addressId || null,
         subtotal: Number(subtotal),
@@ -134,8 +130,19 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    console.log('✅ Order created successfully:', order.id)
-    return NextResponse.json(order, { status: 201 })
+    // Gerar número do pedido formatado com padding (ex: #0001, #0002)
+    const orderNumber = order.id.toString().padStart(4, '0')
+    console.log('🎯 Order number generated:', orderNumber)
+
+    // Atualizar pedido com orderNumber correto
+    const updatedOrder = await prisma.order.update({
+      where: { id: order.id },
+      data: { orderNumber },
+      include: { items: true },
+    })
+
+    console.log('✅ Order created successfully:', updatedOrder.id)
+    return NextResponse.json(updatedOrder, { status: 201 })
   } catch (error: any) {
     console.error('❌ Error creating order:', error)
     console.error('Error message:', error.message)
