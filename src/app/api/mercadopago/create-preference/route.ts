@@ -50,6 +50,8 @@ export async function POST(request: NextRequest) {
         expires: true,
         expiration_date_from: new Date().toISOString(),
         expiration_date_to: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 horas
+        purpose: 'wallet_purchase',
+        binary_mode: false,
       },
     }
 

@@ -6,10 +6,10 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const id = parseInt(params.id)
+    const orderId = parseInt(params.id)
 
     const order = await prisma.order.findUnique({
-      where: { id },
+      where: { id: orderId },
       include: {
         items: {
           include: {
@@ -24,11 +24,12 @@ export async function GET(
     }
 
     // Formatar resposta
-    const formatted = {
+    const formattedOrder = {
       id: order.id,
       orderNumber: order.orderNumber,
       total: order.total,
       status: order.status,
+      paymentStatus: order.paymentStatus,
       createdAt: order.createdAt.toISOString(),
       items: order.items.map((item) => ({
         productName: item.productName,
@@ -46,7 +47,7 @@ export async function GET(
       shippingZipCode: order.shippingZipCode,
     }
 
-    return NextResponse.json(formatted)
+    return NextResponse.json(formattedOrder)
   } catch (error) {
     console.error('Error fetching order:', error)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })

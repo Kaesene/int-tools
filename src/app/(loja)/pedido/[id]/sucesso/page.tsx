@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { formatPrice } from '@/lib/utils'
 import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
@@ -31,13 +32,38 @@ interface OrderDetails {
 export default function PedidoSucessoPage({ params }: { params: { id: string } }) {
   const [order, setOrder] = useState<OrderDetails | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const searchParams = useSearchParams()
 
   useEffect(() => {
-    loadOrder()
+    verifyPaymentAndLoadOrder()
   }, [params.id])
 
-  const loadOrder = async () => {
+  const verifyPaymentAndLoadOrder = async () => {
     try {
+      // Pegar payment_id da URL (Mercado Pago retorna isso)
+      const paymentId = searchParams.get('payment_id')
+
+      if (paymentId) {
+        console.log('💳 Payment ID encontrado na URL:', paymentId)
+
+        // Verificar e atualizar status do pagamento
+        try {
+          const verifyResponse = await fetch(`/api/orders/${params.id}/verify-payment`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ paymentId }),
+          })
+
+          if (verifyResponse.ok) {
+            const verifyData = await verifyResponse.json()
+            console.log('✅ Pagamento verificado:', verifyData)
+          }
+        } catch (verifyError) {
+          console.error('Erro ao verificar pagamento:', verifyError)
+        }
+      }
+
+      // Carregar dados do pedido (agora atualizados)
       const response = await fetch(`/api/orders/${params.id}`)
       if (response.ok) {
         const data = await response.json()
