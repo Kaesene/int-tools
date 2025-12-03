@@ -59,6 +59,11 @@ export async function PUT(
         featured: data.featured ?? false,
         images: data.images || [],
         thumbnail: data.thumbnail || null,
+        // Campos de frete
+        shippingWeight: data.shippingWeight || null,
+        shippingWidth: data.shippingWidth || null,
+        shippingHeight: data.shippingHeight || null,
+        shippingLength: data.shippingLength || null,
       },
     })
 

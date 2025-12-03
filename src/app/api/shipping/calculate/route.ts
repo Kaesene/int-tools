@@ -201,12 +201,16 @@ export async function POST(request: NextRequest) {
     // 17 = Loggi
     const allowedServiceIds = [1, 2, 17]
 
-    // Filtrar apenas PAC, SEDEX e Loggi
-    const filteredOptions = shippingOptions.filter((option: any) =>
-      allowedServiceIds.includes(option.id)
-    )
+    // Filtrar apenas PAC, SEDEX e Loggi, e remover opcoes com preco zerado ou erro
+    const filteredOptions = shippingOptions.filter((option: any) => {
+      const isAllowed = allowedServiceIds.includes(option.id)
+      const hasValidPrice = option.price && parseFloat(option.price) > 0
+      const noError = !option.error
 
-    console.log('🔍 Opcoes filtradas (PAC, SEDEX, Loggi):', filteredOptions.map((o: any) => o.name))
+      return isAllowed && hasValidPrice && noError
+    })
+
+    console.log('🔍 Opcoes filtradas (PAC, SEDEX, Loggi):', filteredOptions.map((o: any) => `${o.name} - R$ ${o.price}`))
 
     // Formatar opcoes
     const formattedOptions = filteredOptions.map((option: any) => ({

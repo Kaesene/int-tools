@@ -38,6 +38,11 @@ export default function EditProductPage({ params }: EditProductPageProps) {
     warranty: '',
     active: true,
     featured: false,
+    // Campos de frete
+    shippingWeight: '',
+    shippingWidth: '',
+    shippingHeight: '',
+    shippingLength: '',
   })
 
   const [images, setImages] = useState<string[]>([])
@@ -69,6 +74,11 @@ export default function EditProductPage({ params }: EditProductPageProps) {
         warranty: product.warranty || '',
         active: product.active ?? true,
         featured: product.featured ?? false,
+        // Campos de frete
+        shippingWeight: product.shippingWeight ? String(product.shippingWeight).replace('.', ',') : '',
+        shippingWidth: product.shippingWidth ? String(product.shippingWidth) : '',
+        shippingHeight: product.shippingHeight ? String(product.shippingHeight) : '',
+        shippingLength: product.shippingLength ? String(product.shippingLength) : '',
       })
       setImages(product.images || [])
     } catch (err) {
@@ -103,6 +113,11 @@ export default function EditProductPage({ params }: EditProductPageProps) {
           categoryId: parseInt(formData.categoryId),
           images,
           thumbnail: images[0] || null,
+          // Converter campos de frete (vírgula para ponto)
+          shippingWeight: formData.shippingWeight ? parseFloat(formData.shippingWeight.replace(',', '.')) : null,
+          shippingWidth: formData.shippingWidth ? parseInt(formData.shippingWidth) : null,
+          shippingHeight: formData.shippingHeight ? parseInt(formData.shippingHeight) : null,
+          shippingLength: formData.shippingLength ? parseInt(formData.shippingLength) : null,
         }),
       })
 
@@ -246,6 +261,87 @@ export default function EditProductPage({ params }: EditProductPageProps) {
                 required
                 placeholder="0"
               />
+            </div>
+          </div>
+
+          {/* Shipping Dimensions - CRÍTICO PARA FRETE */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <h2 className="text-lg font-semibold text-gray-900">Dimensões para Frete</h2>
+              <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded-full">IMPORTANTE</span>
+            </div>
+            <p className="text-sm text-gray-600 mb-4">
+              Essas informações são essenciais para o cálculo correto do frete.
+              Preencha com as dimensões da embalagem do produto.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Peso (kg) *
+                </label>
+                <input
+                  type="text"
+                  value={formData.shippingWeight}
+                  onChange={(e) => {
+                    // Aceita apenas números e vírgula
+                    const value = e.target.value.replace(/[^0-9,]/g, '')
+                    setFormData({ ...formData, shippingWeight: value })
+                  }}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-900 bg-white"
+                  placeholder="0,500"
+                  required
+                />
+                <p className="text-xs text-gray-500 mt-1">Ex: 1,5 para 1,5kg</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Largura (cm) *
+                </label>
+                <input
+                  type="number"
+                  value={formData.shippingWidth}
+                  onChange={(e) => setFormData({ ...formData, shippingWidth: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-900 bg-white"
+                  placeholder="20"
+                  required
+                />
+                <p className="text-xs text-gray-500 mt-1">Mínimo: 11cm</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Altura (cm) *
+                </label>
+                <input
+                  type="number"
+                  value={formData.shippingHeight}
+                  onChange={(e) => setFormData({ ...formData, shippingHeight: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-900 bg-white"
+                  placeholder="15"
+                  required
+                />
+                <p className="text-xs text-gray-500 mt-1">Mínimo: 2cm</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Comprimento (cm) *
+                </label>
+                <input
+                  type="number"
+                  value={formData.shippingLength}
+                  onChange={(e) => setFormData({ ...formData, shippingLength: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-900 bg-white"
+                  placeholder="30"
+                  required
+                />
+                <p className="text-xs text-gray-500 mt-1">Mínimo: 16cm</p>
+              </div>
+            </div>
+            <div className="mt-3 text-xs text-gray-600 bg-white rounded p-3">
+              <strong>Nota:</strong> A soma das dimensões (C+L+A) não pode ultrapassar 200cm.
+              Dimensão mínima: 11x2x16cm. Peso máximo: 30kg.
             </div>
           </div>
 
