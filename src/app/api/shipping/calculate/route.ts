@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         options: [
           {
-            id: 'pac',
+            id: '1',
             name: 'PAC',
             price: 15.00,
             delivery_time: 10,
@@ -96,12 +96,22 @@ export async function POST(request: NextRequest) {
             },
           },
           {
-            id: 'sedex',
+            id: '2',
             name: 'SEDEX',
             price: 25.00,
             delivery_time: 5,
             company: {
               name: 'Correios',
+              picture: '',
+            },
+          },
+          {
+            id: '17',
+            name: 'Loggi Express',
+            price: 20.00,
+            delivery_time: 2,
+            company: {
+              name: 'Loggi',
               picture: '',
             },
           },
@@ -149,7 +159,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         options: [
           {
-            id: 'pac',
+            id: '1',
             name: 'PAC',
             price: 15.00,
             delivery_time: 10,
@@ -159,12 +169,22 @@ export async function POST(request: NextRequest) {
             },
           },
           {
-            id: 'sedex',
+            id: '2',
             name: 'SEDEX',
             price: 25.00,
             delivery_time: 5,
             company: {
               name: 'Correios',
+              picture: '',
+            },
+          },
+          {
+            id: '17',
+            name: 'Loggi Express',
+            price: 20.00,
+            delivery_time: 2,
+            company: {
+              name: 'Loggi',
               picture: '',
             },
           },
@@ -175,8 +195,21 @@ export async function POST(request: NextRequest) {
     const shippingOptions = await response.json()
     console.log('✅ Opcoes de frete:', shippingOptions)
 
+    // IDs das transportadoras permitidas (Melhor Envio)
+    // 1 = Correios PAC
+    // 2 = Correios SEDEX
+    // 17 = Loggi
+    const allowedServiceIds = [1, 2, 17]
+
+    // Filtrar apenas PAC, SEDEX e Loggi
+    const filteredOptions = shippingOptions.filter((option: any) =>
+      allowedServiceIds.includes(option.id)
+    )
+
+    console.log('🔍 Opcoes filtradas (PAC, SEDEX, Loggi):', filteredOptions.map((o: any) => o.name))
+
     // Formatar opcoes
-    const formattedOptions = shippingOptions.map((option: any) => ({
+    const formattedOptions = filteredOptions.map((option: any) => ({
       id: option.id.toString(),
       name: option.name,
       price: parseFloat(option.price),
@@ -195,7 +228,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       options: [
         {
-          id: 'pac',
+          id: '1',
           name: 'PAC',
           price: 15.00,
           delivery_time: 10,
@@ -205,12 +238,22 @@ export async function POST(request: NextRequest) {
           },
         },
         {
-          id: 'sedex',
+          id: '2',
           name: 'SEDEX',
           price: 25.00,
           delivery_time: 5,
           company: {
             name: 'Correios',
+            picture: '',
+          },
+        },
+        {
+          id: '17',
+          name: 'Loggi Express',
+          price: 20.00,
+          delivery_time: 2,
+          company: {
+            name: 'Loggi',
             picture: '',
           },
         },
