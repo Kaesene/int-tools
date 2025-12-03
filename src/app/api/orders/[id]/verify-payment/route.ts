@@ -8,6 +8,9 @@ const client = new MercadoPagoConfig({
 
 const payment = new Payment(client)
 
+// Função auxiliar para aguardar
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -17,14 +20,41 @@ export async function POST(
     const body = await request.json()
     const { paymentId } = body
 
-    console.log('🔍 Verificando pagamento:', { orderId, paymentId })
+    console.log('🔍 Verificando pagamento:', {
+      orderId,
+      paymentId,
+      accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN?.substring(0, 20) + '...'
+    })
 
     if (!paymentId) {
       return NextResponse.json({ error: 'paymentId is required' }, { status: 400 })
     }
 
-    // Buscar detalhes do pagamento no Mercado Pago
-    const paymentData = await payment.get({ id: paymentId })
+    // Tentar buscar o pagamento com retry (até 3 tentativas)
+    let paymentData = null
+    let lastError = null
+
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        console.log(`🔄 Tentativa ${attempt} de buscar pagamento ${paymentId}`)
+        paymentData = await payment.get({ id: paymentId })
+        console.log('✅ Pagamento encontrado!')
+        break
+      } catch (error: any) {
+        lastError = error
+        console.log(`❌ Tentativa ${attempt} falhou:`, error.message)
+
+        if (attempt < 3) {
+          console.log(`⏳ Aguardando ${attempt * 2}s antes de tentar novamente...`)
+          await sleep(attempt * 2000) // 2s, 4s
+        }
+      }
+    }
+
+    if (!paymentData) {
+      console.error('❌ Não foi possível encontrar o pagamento após 3 tentativas')
+      throw lastError
+    }
 
     console.log('💳 Dados do pagamento:', {
       id: paymentData.id,
