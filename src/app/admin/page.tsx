@@ -9,6 +9,8 @@ import {
   FiAlertCircle,
 } from 'react-icons/fi'
 
+export const dynamic = 'force-dynamic'
+
 async function getDashboardData() {
   // Total de produtos
   const totalProducts = await prisma.product.count()

@@ -4,6 +4,8 @@ import { FiPlus, FiEdit, FiTrash2 } from 'react-icons/fi'
 import { Button } from '@/components/ui/Button'
 import { DeleteCategoryButton } from '@/components/admin/DeleteCategoryButton'
 
+export const dynamic = 'force-dynamic'
+
 async function getCategories() {
   const categories = await prisma.category.findMany({
     include: {

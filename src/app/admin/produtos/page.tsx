@@ -3,6 +3,8 @@ import { formatPrice } from '@/lib/utils'
 import Link from 'next/link'
 import { FiPlus, FiEdit, FiAlertCircle, FiCheckCircle, FiXCircle } from 'react-icons/fi'
 import { Button } from '@/components/ui/Button'
+
+export const dynamic = 'force-dynamic'
 import { DeleteProductButton } from '@/components/admin/DeleteProductButton'
 
 async function getProducts() {

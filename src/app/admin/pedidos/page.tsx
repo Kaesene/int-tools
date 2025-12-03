@@ -4,6 +4,8 @@ import { UpdateOrderStatusButton } from '@/components/admin/UpdateOrderStatusBut
 import Link from 'next/link'
 import { FiEye, FiPackage, FiClock, FiCheckCircle, FiXCircle } from 'react-icons/fi'
 
+export const dynamic = 'force-dynamic'
+
 async function getOrders() {
   const orders = await prisma.order.findMany({
     include: {

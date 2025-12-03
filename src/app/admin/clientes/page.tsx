@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/prisma'
 import { FiUser, FiMail, FiMapPin, FiShoppingBag } from 'react-icons/fi'
 
+export const dynamic = 'force-dynamic'
+
 async function getCustomers() {
   const customers = await prisma.user.findMany({
     include: {
