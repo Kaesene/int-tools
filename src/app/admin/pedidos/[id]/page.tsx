@@ -29,7 +29,7 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
   if (!order) {
     return (
       <div className="p-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Pedido não encontrado</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">Pedido nao encontrado</h1>
         <Link href="/admin/pedidos">
           <Button variant="outline">Voltar para Pedidos</Button>
         </Link>
@@ -101,7 +101,7 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Frete:</span>
                 <span className="font-medium">
-                  {order.shippingCost > 0 ? formatPrice(order.shippingCost) : 'GRÁTIS'}
+                  {order.shippingCost > 0 ? formatPrice(order.shippingCost) : 'GRATIS'}
                 </span>
               </div>
               {Number(order.discount) > 0 && (
@@ -121,7 +121,7 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
               <FiMapPin size={20} />
-              Endereço de Entrega
+              Endereco de Entrega
             </h2>
             <div className="text-gray-700 space-y-1">
               <p className="font-semibold">{order.shippingName}</p>
@@ -179,7 +179,7 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
               </div>
               {order.paymentMethod && (
                 <div>
-                  <p className="text-sm text-gray-600">Método</p>
+                  <p className="text-sm text-gray-600">Metodo</p>
                   <p className="font-medium text-gray-900">{order.paymentMethod}</p>
                 </div>
               )}
