@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { FiArrowLeft, FiPackage, FiMapPin, FiUser, FiCalendar, FiCreditCard } from 'react-icons/fi'
 import { Button } from '@/components/ui/Button'
 import { UpdateOrderStatusButton } from '@/components/admin/UpdateOrderStatusButton'
+import { TrackingCodeInput } from '@/components/admin/TrackingCodeInput'
 
 export const dynamic = 'force-dynamic'
 
@@ -123,13 +124,18 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
               <FiMapPin size={20} />
               Endereco de Entrega
             </h2>
-            <div className="text-gray-700 space-y-1">
+            <div className="text-gray-700 space-y-1 mb-6">
               <p className="font-semibold">{order.shippingName}</p>
               <p>{order.shippingStreet}, {order.shippingNumber}</p>
               {order.shippingComplement && <p>{order.shippingComplement}</p>}
               <p>{order.shippingNeighborhood}</p>
               <p>{order.shippingCity} - {order.shippingState}</p>
               <p>CEP: {order.shippingZipCode}</p>
+            </div>
+
+            {/* Tracking Code */}
+            <div className="pt-6 border-t">
+              <TrackingCodeInput orderId={order.id} currentTrackingCode={order.trackingCode} />
             </div>
           </div>
         </div>

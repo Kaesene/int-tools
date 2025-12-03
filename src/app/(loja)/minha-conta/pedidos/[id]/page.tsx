@@ -11,6 +11,7 @@ interface OrderDetails {
   orderNumber: string
   total: number
   status: string
+  paymentStatus: string
   createdAt: string
   items: {
     productName: string
@@ -26,6 +27,7 @@ interface OrderDetails {
   shippingCity: string
   shippingState: string
   shippingZipCode: string
+  trackingCode?: string
 }
 
 const statusConfig = {
@@ -154,6 +156,30 @@ export default function PedidoDetalhesPage({ params }: { params: { id: string } 
               <p>{order.shippingCity} - {order.shippingState}</p>
               <p>CEP: {order.shippingZipCode}</p>
             </div>
+
+            {/* Tracking Code */}
+            {order.trackingCode && (
+              <div className="mt-6 pt-6 border-t">
+                <h3 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                  <FiTruck size={16} />
+                  Rastreamento
+                </h3>
+                <div className="flex items-center gap-3 flex-wrap">
+                  <code className="px-3 py-2 bg-gray-100 rounded font-mono text-sm font-semibold">
+                    {order.trackingCode}
+                  </code>
+                  <a
+                    href={`https://rastreamento.correios.com.br/app/index.php?objeto=${order.trackingCode}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors text-sm font-medium"
+                  >
+                    <FiPackage size={16} />
+                    Rastrear no site dos Correios
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

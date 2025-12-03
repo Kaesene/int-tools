@@ -45,6 +45,7 @@ export async function GET(
       shippingCity: order.shippingCity,
       shippingState: order.shippingState,
       shippingZipCode: order.shippingZipCode,
+      trackingCode: order.trackingCode,
     }
 
     return NextResponse.json(formattedOrder)
