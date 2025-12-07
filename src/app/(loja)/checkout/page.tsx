@@ -22,6 +22,8 @@ import Link from 'next/link'
 interface Address {
   id: number
   name: string
+  phone?: string
+  cpf?: string
   street: string
   number: string
   complement?: string
@@ -212,6 +214,8 @@ export default function CheckoutPage() {
           discount: 0,
           total: orderTotal,
           shippingName: selectedAddress.name,
+          shippingPhone: selectedAddress.phone || user?.user_metadata?.phone || '',
+          shippingCpf: selectedAddress.cpf || user?.user_metadata?.cpf || '',
           shippingStreet: selectedAddress.street,
           shippingNumber: selectedAddress.number,
           shippingComplement: selectedAddress.complement,

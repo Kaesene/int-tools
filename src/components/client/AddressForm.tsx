@@ -4,6 +4,7 @@ import { useState, FormEvent } from 'react'
 import { Input } from '@/components/ui/Button'
 import { Button } from '@/components/ui/Button'
 import { FiX } from 'react-icons/fi'
+import { isValidCPF, formatCPF, isValidPhone, formatPhone } from '@/lib/utils'
 
 interface AddressFormProps {
   userId: string
@@ -18,6 +19,8 @@ export function AddressForm({ userId, onClose, onSuccess, address }: AddressForm
 
   const [formData, setFormData] = useState({
     name: address?.name || '',
+    phone: address?.phone || '',
+    cpf: address?.cpf || '',
     zipCode: address?.zipCode || '',
     street: address?.street || '',
     number: address?.number || '',
@@ -32,6 +35,20 @@ export function AddressForm({ userId, onClose, onSuccess, address }: AddressForm
     e.preventDefault()
     setIsLoading(true)
     setError('')
+
+    // Validar CPF
+    if (!isValidCPF(formData.cpf)) {
+      setError('CPF inválido')
+      setIsLoading(false)
+      return
+    }
+
+    // Validar telefone
+    if (!isValidPhone(formData.phone)) {
+      setError('Telefone inválido (deve ter 11 dígitos)')
+      setIsLoading(false)
+      return
+    }
 
     try {
       const url = address
@@ -122,6 +139,44 @@ export function AddressForm({ userId, onClose, onSuccess, address }: AddressForm
               placeholder="Ex: Casa, Trabalho, etc"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none text-gray-900 bg-white"
             />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Telefone *
+              </label>
+              <input
+                type="tel"
+                value={formatPhone(formData.phone)}
+                onChange={(e) => {
+                  const cleaned = e.target.value.replace(/\D/g, '')
+                  setFormData({ ...formData, phone: cleaned })
+                }}
+                required
+                placeholder="(11) 98765-4321"
+                maxLength={15}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none text-gray-900 bg-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                CPF *
+              </label>
+              <input
+                type="text"
+                value={formatCPF(formData.cpf)}
+                onChange={(e) => {
+                  const cleaned = e.target.value.replace(/\D/g, '')
+                  setFormData({ ...formData, cpf: cleaned })
+                }}
+                required
+                placeholder="123.456.789-09"
+                maxLength={14}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none text-gray-900 bg-white"
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
