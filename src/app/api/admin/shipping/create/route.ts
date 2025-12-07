@@ -20,8 +20,13 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    if (!order || !order.address) {
-      return NextResponse.json({ error: 'Pedido ou endereço não encontrado' }, { status: 404 })
+    if (!order) {
+      return NextResponse.json({ error: 'Pedido não encontrado' }, { status: 404 })
+    }
+
+    // Validar se tem dados de envio
+    if (!order.shippingZipCode || !order.shippingStreet || !order.shippingCity) {
+      return NextResponse.json({ error: 'Dados de endereço incompletos no pedido' }, { status: 400 })
     }
 
     // Calcular peso e dimensões totais dos produtos
