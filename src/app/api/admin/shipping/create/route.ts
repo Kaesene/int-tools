@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
         length: totalLength,
       },
       options: {
-        insurance_value: Number(order.total),
+        insurance_value: Number(order.subtotal), // Seguro apenas dos produtos (sem frete)
         receipt: false,
         own_hand: false,
         collect: false,
