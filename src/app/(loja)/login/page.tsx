@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, FormEvent, useEffect } from 'react'
+import { useState, FormEvent, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useClientAuth } from '@/contexts/ClientAuthContext'
 import { Input } from '@/components/ui/Input'
@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/Button'
 import Link from 'next/link'
 import { FiMail, FiLock, FiUser } from 'react-icons/fi'
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { signIn, signUp } = useClientAuth()
@@ -186,7 +186,7 @@ export default function LoginPage() {
             <p className="text-sm text-center text-gray-600">
               Esqueceu sua senha?{' '}
               <Link href="/recuperar-senha" className="text-primary-500 hover:underline">
-                Recuperar
+                Clique aqui
               </Link>
             </p>
           </form>
@@ -201,7 +201,7 @@ export default function LoginPage() {
               value={registerData.name}
               onChange={(e) => setRegisterData({ ...registerData, name: e.target.value })}
               required
-              placeholder="João da Silva"
+              placeholder="Seu nome"
               icon={<FiUser size={18} />}
             />
 
@@ -249,5 +249,19 @@ export default function LoginPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-md mx-auto text-center">
+          <p className="text-gray-600">Carregando...</p>
+        </div>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   )
 }
