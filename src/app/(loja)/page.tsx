@@ -1,8 +1,40 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/Button'
 import Link from 'next/link'
+import Image from 'next/image'
 import { FiTool, FiShield, FiTruck, FiAward } from 'react-icons/fi'
 
+interface Category {
+  id: number
+  name: string
+  slug: string
+  imageUrl: string | null
+}
+
 export default function Home() {
+  const [categories, setCategories] = useState<Category[]>([])
+  const [isLoadingCategories, setIsLoadingCategories] = useState(true)
+
+  useEffect(() => {
+    fetchCategories()
+  }, [])
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('/api/categories/featured')
+      if (response.ok) {
+        const data = await response.json()
+        setCategories(data)
+      }
+    } catch (error) {
+      console.error('Erro ao buscar categorias:', error)
+    } finally {
+      setIsLoadingCategories(false)
+    }
+  }
+
   return (
     <>
       {/* Hero Section */}
@@ -74,24 +106,36 @@ export default function Home() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Categorias Populares</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {[
-              'Ferramentas Manuais',
-              'Ferramentas Elétricas',
-              'Ferramentas de Jardim',
-              'Equipamentos de Segurança',
-              'Acessórios',
-              'Medição e Nivelamento'
-            ].map((category) => (
-              <div
-                key={category}
-                className="bg-white border-2 border-gray-200 rounded-lg p-6 text-center hover:border-primary-500 hover:shadow-lg transition-all cursor-pointer"
-              >
-                <div className="w-16 h-16 bg-gray-100 rounded-full mx-auto mb-3"></div>
-                <h3 className="font-medium text-sm">{category}</h3>
-              </div>
-            ))}
-          </div>
+
+          {isLoadingCategories ? (
+            <div className="text-center text-gray-500">Carregando categorias...</div>
+          ) : categories.length === 0 ? (
+            <div className="text-center text-gray-500">Nenhuma categoria em destaque</div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {categories.map((category) => (
+                <Link
+                  key={category.id}
+                  href={`/categorias/${category.slug}`}
+                  className="bg-white border-2 border-gray-200 rounded-lg p-6 text-center hover:border-primary-500 hover:shadow-lg transition-all"
+                >
+                  <div className="w-16 h-16 mx-auto mb-3 relative">
+                    {category.imageUrl ? (
+                      <Image
+                        src={category.imageUrl}
+                        alt={category.name}
+                        fill
+                        className="object-contain"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 bg-gray-100 rounded-full"></div>
+                    )}
+                  </div>
+                  <h3 className="font-medium text-sm">{category.name}</h3>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

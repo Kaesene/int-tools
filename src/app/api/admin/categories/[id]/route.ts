@@ -39,7 +39,11 @@ export async function PUT(
       data: {
         name: data.name,
         slug: data.slug,
+        description: data.description || null,
         imageUrl: data.imageUrl || null,
+        isFeatured: data.isFeatured ?? false,
+        displayOrder: data.displayOrder ?? 0,
+        active: data.active ?? true,
       },
     })
 

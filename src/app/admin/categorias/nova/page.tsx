@@ -5,17 +5,24 @@ import { useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import { slugify } from '@/lib/utils'
-import { FiSave, FiX } from 'react-icons/fi'
+import { FiSave, FiX, FiUpload } from 'react-icons/fi'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function NewCategoryPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [error, setError] = useState('')
 
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
+    description: '',
+    imageUrl: '',
+    isFeatured: false,
+    displayOrder: 0,
+    active: true,
   })
 
   const handleNameChange = (name: string) => {
@@ -24,6 +31,36 @@ export default function NewCategoryPage() {
       name,
       slug: slugify(name),
     })
+  }
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploading(true)
+    setError('')
+
+    try {
+      const formDataUpload = new FormData()
+      formDataUpload.append('file', file)
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formDataUpload,
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Erro ao fazer upload')
+      }
+
+      const data = await response.json()
+      setFormData({ ...formData, imageUrl: data.url })
+    } catch (error: any) {
+      setError(error.message || 'Erro ao fazer upload da imagem')
+    } finally {
+      setUploading(false)
+    }
   }
 
   const handleSubmit = async (e: FormEvent) => {
@@ -77,7 +114,8 @@ export default function NewCategoryPage() {
       {/* Form */}
       <form onSubmit={handleSubmit}>
         <div className="bg-white rounded-lg shadow-sm p-6 max-w-2xl">
-          <div className="space-y-4">
+          <div className="space-y-6">
+            {/* Nome e Slug */}
             <Input
               label="Nome da Categoria *"
               value={formData.name}
@@ -93,6 +131,104 @@ export default function NewCategoryPage() {
               required
               placeholder="ferramentas-eletricas"
             />
+
+            {/* Descrição */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Descrição
+              </label>
+              <textarea
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                rows={3}
+                placeholder="Descrição da categoria (opcional)"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
+              />
+            </div>
+
+            {/* Upload de Imagem */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Imagem da Categoria
+              </label>
+              <div className="flex items-center gap-4">
+                <label className="cursor-pointer">
+                  <div className="px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-500 transition-colors flex items-center gap-2">
+                    <FiUpload size={20} />
+                    <span className="text-sm">
+                      {uploading ? 'Fazendo upload...' : 'Escolher imagem'}
+                    </span>
+                  </div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploading}
+                    className="hidden"
+                  />
+                </label>
+                {formData.imageUrl && (
+                  <div className="relative w-20 h-20 border border-gray-200 rounded-lg overflow-hidden">
+                    <Image
+                      src={formData.imageUrl}
+                      alt="Preview"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                )}
+              </div>
+              <p className="text-xs text-gray-500 mt-2">
+                PNG, JPG, WEBP ou SVG (máx 2MB)
+              </p>
+            </div>
+
+            {/* Ordem de Exibição */}
+            <Input
+              label="Ordem de Exibição"
+              type="number"
+              value={formData.displayOrder.toString()}
+              onChange={(e) => setFormData({ ...formData, displayOrder: parseInt(e.target.value) || 0 })}
+              placeholder="0"
+              helperText="Menor número = aparece primeiro"
+            />
+
+            {/* Checkboxes */}
+            <div className="space-y-3 pt-4 border-t">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.isFeatured}
+                  onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
+                  className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                />
+                <div>
+                  <span className="text-sm font-medium text-gray-900">
+                    Exibir em Destaque
+                  </span>
+                  <p className="text-xs text-gray-500">
+                    Aparece no menu superior e na home
+                  </p>
+                </div>
+              </label>
+
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.active}
+                  onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
+                  className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                />
+                <div>
+                  <span className="text-sm font-medium text-gray-900">
+                    Categoria Ativa
+                  </span>
+                  <p className="text-xs text-gray-500">
+                    Categoria visível no site
+                  </p>
+                </div>
+              </label>
+            </div>
           </div>
 
           {/* Actions */}

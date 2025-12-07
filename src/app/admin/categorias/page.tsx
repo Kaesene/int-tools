@@ -15,9 +15,10 @@ async function getCategories() {
         },
       },
     },
-    orderBy: {
-      name: 'asc',
-    },
+    orderBy: [
+      { displayOrder: 'asc' },
+      { name: 'asc' },
+    ],
   })
 
   return categories
@@ -48,11 +49,26 @@ export default async function AdminCategoriesPage() {
           <div key={category.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
-                <h3 className="font-semibold text-lg text-gray-900">{category.name}</h3>
-                <p className="text-sm text-gray-500 mt-1">Slug: {category.slug}</p>
-                <p className="text-sm text-gray-600 mt-2">
+                <div className="flex items-center gap-2 mb-2">
+                  <h3 className="font-semibold text-lg text-gray-900">{category.name}</h3>
+                  {category.isFeatured && (
+                    <span className="px-2 py-0.5 text-xs font-medium bg-primary-100 text-primary-700 rounded">
+                      Destaque
+                    </span>
+                  )}
+                  {!category.active && (
+                    <span className="px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-600 rounded">
+                      Inativa
+                    </span>
+                  )}
+                </div>
+                <p className="text-sm text-gray-500">Slug: {category.slug}</p>
+                <p className="text-sm text-gray-600 mt-1">
                   {category._count.products} {category._count.products === 1 ? 'produto' : 'produtos'}
                 </p>
+                {category.displayOrder > 0 && (
+                  <p className="text-xs text-gray-500 mt-1">Ordem: {category.displayOrder}</p>
+                )}
               </div>
               {category.imageUrl && (
                 <div className="w-16 h-16 bg-gray-100 rounded overflow-hidden ml-4">

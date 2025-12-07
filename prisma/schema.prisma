@@ -8,14 +8,21 @@ datasource db {
 }
 
 model Category {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(100)
-  slug      String    @unique @db.VarChar(100)
-  imageUrl  String?   @db.Text @map("image_url")
-  createdAt DateTime  @default(now()) @map("created_at")
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(100)
+  slug        String    @unique @db.VarChar(100)
+  description String?   @db.Text
+  imageUrl    String?   @db.Text @map("image_url")
+  isFeatured  Boolean   @default(false) @map("is_featured")
+  displayOrder Int      @default(0) @map("display_order")
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at")
 
-  products  Product[]
+  products    Product[]
 
+  @@index([isFeatured])
+  @@index([active])
   @@map("categories")
 }
 

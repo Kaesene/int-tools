@@ -1,16 +1,39 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { FiSearch } from 'react-icons/fi'
 import { CartButton } from '@/components/cart/CartButton'
 import { UserMenu } from '@/components/layout/UserMenu'
 
+interface Category {
+  id: number
+  name: string
+  slug: string
+}
+
 export function Header() {
   const router = useRouter()
   const [searchDesktop, setSearchDesktop] = useState('')
   const [searchMobile, setSearchMobile] = useState('')
+  const [categories, setCategories] = useState<Category[]>([])
+
+  useEffect(() => {
+    fetchCategories()
+  }, [])
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('/api/categories/featured')
+      if (response.ok) {
+        const data = await response.json()
+        setCategories(data.slice(0, 6)) // Máx 6 categorias
+      }
+    } catch (error) {
+      console.error('Erro ao buscar categorias:', error)
+    }
+  }
 
   const handleSearch = (search: string) => {
     if (search.trim()) {
@@ -93,21 +116,16 @@ export function Header() {
                 Todos os Produtos
               </Link>
             </li>
-            <li>
-              <Link href="/categorias/ferramentas-manuais" className="text-sm text-gray-600 hover:text-primary-500 whitespace-nowrap">
-                Ferramentas Manuais
-              </Link>
-            </li>
-            <li>
-              <Link href="/categorias/ferramentas-eletricas" className="text-sm text-gray-600 hover:text-primary-500 whitespace-nowrap">
-                Ferramentas Elétricas
-              </Link>
-            </li>
-            <li>
-              <Link href="/categorias/equipamentos-de-seguranca" className="text-sm text-gray-600 hover:text-primary-500 whitespace-nowrap">
-                Segurança
-              </Link>
-            </li>
+            {categories.map((category) => (
+              <li key={category.id}>
+                <Link
+                  href={`/categorias/${category.slug}`}
+                  className="text-sm text-gray-600 hover:text-primary-500 whitespace-nowrap"
+                >
+                  {category.name}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
       </div>
