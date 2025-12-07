@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { sendEmail, orderShippedEmail } from '@/lib/email'
 
 export async function PATCH(
   request: NextRequest,
@@ -28,9 +29,38 @@ export async function PATCH(
         status: 'shipped', // Atualiza status para enviado
         updatedAt: new Date(),
       },
+      include: {
+        user: true,
+      },
     })
 
     console.log('✅ Codigo de rastreio atualizado com sucesso')
+
+    // Enviar email de pedido enviado
+    try {
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.inttools.com.br'
+      const orderUrl = `${siteUrl}/minha-conta/pedidos/${updatedOrder.id}`
+      const trackingUrl = `https://rastreamento.correios.com.br/app/index.php?objeto=${updatedOrder.trackingCode}`
+
+      const emailHtml = orderShippedEmail({
+        orderNumber: updatedOrder.orderNumber,
+        customerName: updatedOrder.user.name || updatedOrder.user.email,
+        trackingCode: updatedOrder.trackingCode!,
+        trackingUrl,
+        orderUrl,
+      })
+
+      await sendEmail({
+        to: updatedOrder.user.email,
+        subject: `Pedido #${updatedOrder.orderNumber} foi enviado! - INT Tools`,
+        html: emailHtml,
+      })
+
+      console.log('📧 Email de envio enviado para:', updatedOrder.user.email)
+    } catch (emailError) {
+      console.error('❌ Erro ao enviar email de envio:', emailError)
+      // Nao falha a operacao se o email falhar
+    }
 
     return NextResponse.json({
       success: true,

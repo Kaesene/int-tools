@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { sendEmail, orderConfirmationEmail } from '@/lib/email'
 
 export async function GET(request: NextRequest) {
   try {
@@ -138,10 +139,43 @@ export async function POST(request: NextRequest) {
     const updatedOrder = await prisma.order.update({
       where: { id: order.id },
       data: { orderNumber },
-      include: { items: true },
+      include: {
+        items: true,
+        user: true,
+      },
     })
 
     console.log('✅ Order created successfully:', updatedOrder.id)
+
+    // Enviar email de confirmacao de pedido
+    try {
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.inttools.com.br'
+      const orderUrl = `${siteUrl}/minha-conta/pedidos/${updatedOrder.id}`
+
+      const emailHtml = orderConfirmationEmail({
+        orderNumber: updatedOrder.orderNumber,
+        customerName: updatedOrder.user.name || updatedOrder.user.email,
+        total: `R$ ${updatedOrder.total.toFixed(2).replace('.', ',')}`,
+        items: updatedOrder.items.map((item) => ({
+          name: item.productName,
+          quantity: item.quantity,
+          price: `R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}`,
+        })),
+        orderUrl,
+      })
+
+      await sendEmail({
+        to: updatedOrder.user.email,
+        subject: `Pedido #${updatedOrder.orderNumber} confirmado - INT Tools`,
+        html: emailHtml,
+      })
+
+      console.log('📧 Email de confirmacao enviado para:', updatedOrder.user.email)
+    } catch (emailError) {
+      console.error('❌ Erro ao enviar email de confirmacao:', emailError)
+      // Nao falha o pedido se o email falhar
+    }
+
     return NextResponse.json(updatedOrder, { status: 201 })
   } catch (error: any) {
     console.error('❌ Error creating order:', error)
