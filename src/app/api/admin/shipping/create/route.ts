@@ -41,15 +41,15 @@ export async function POST(request: NextRequest) {
     // Dados da loja (origem)
     const shopData = {
       name: 'INT Tools',
-      phone: '15998765432', // TODO: Configurar telefone real
+      phone: process.env.SHOP_PHONE || '15998765432',
       email: process.env.EMAIL_FROM || 'noreply@inttools.com.br',
-      document: '12345678901', // TODO: Configurar CPF/CNPJ real
-      address: 'Rua Principal',
-      number: '100',
-      district: 'Centro',
-      city: 'Marília',
-      state_abbr: 'SP',
-      postal_code: process.env.SHOP_ZIP_CODE || '17520110',
+      document: process.env.SHOP_DOCUMENT || '12345678901',
+      address: process.env.SHOP_ADDRESS || 'Rua Principal',
+      number: process.env.SHOP_NUMBER || '100',
+      district: process.env.SHOP_DISTRICT || 'Centro',
+      city: process.env.SHOP_CITY || 'Marília',
+      state_abbr: process.env.SHOP_STATE || 'SP',
+      postal_code: (process.env.SHOP_ZIP_CODE || '17520110').replace('-', ''),
     }
 
     // Dados do cliente (destino) - pega do order ou address
@@ -67,11 +67,19 @@ export async function POST(request: NextRequest) {
       postal_code: order.shippingZipCode.replace('-', ''),
     }
 
+    // Preparar produtos para declaração
+    const products = order.items.map((item) => ({
+      name: item.product.name,
+      quantity: item.quantity,
+      unitary_value: Number(item.price),
+    }))
+
     // Criar envio no Melhor Envio
     const shipmentData = {
       service: getServiceId(order.shippingMethod || 'PAC'),
       from: shopData,
       to: customerData,
+      products,
       package: {
         weight: totalWeight,
         width: maxWidth,
@@ -79,7 +87,7 @@ export async function POST(request: NextRequest) {
         length: totalLength,
       },
       options: {
-        insurance_value: order.total,
+        insurance_value: Number(order.total),
         receipt: false,
         own_hand: false,
         collect: false,

@@ -49,6 +49,11 @@ export interface CreateShipmentData {
     state_abbr: string
     postal_code: string
   }
+  products: Array<{
+    name: string
+    quantity: number
+    unitary_value: number
+  }>
   package: {
     weight: number
     width: number
