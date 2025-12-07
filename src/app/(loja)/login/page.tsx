@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, FormEvent, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useClientAuth } from '@/contexts/ClientAuthContext'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
@@ -10,6 +10,7 @@ import { FiMail, FiLock, FiUser } from 'react-icons/fi'
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { signIn, signUp } = useClientAuth()
   const [mode, setMode] = useState<'login' | 'register'>('login')
   const [isLoading, setIsLoading] = useState(false)
@@ -26,6 +27,14 @@ export default function LoginPage() {
     password: '',
     confirmPassword: '',
   })
+
+  // Ler parâmetro da URL para definir modo inicial
+  useEffect(() => {
+    const modeParam = searchParams.get('mode')
+    if (modeParam === 'register') {
+      setMode('register')
+    }
+  }, [searchParams])
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault()

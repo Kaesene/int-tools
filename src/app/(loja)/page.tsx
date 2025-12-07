@@ -102,7 +102,7 @@ export default function Home() {
           <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
             Crie sua conta e aproveite ofertas exclusivas em ferramentas profissionais
           </p>
-          <Link href="/cadastro">
+          <Link href="/login?mode=register">
             <Button size="lg" variant="primary">
               Criar Conta Grátis
             </Button>
