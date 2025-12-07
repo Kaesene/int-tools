@@ -54,13 +54,25 @@ NEXT_PUBLIC_GA_ID = G-XXXXXXXXXX
 
 ---
 
-### 3. Melhor Envio (Já Configurado Localmente) - CRÍTICO
+### 3. Melhor Envio (Sistema Automatizado COMPLETO) - CRÍTICO
 ```
 MELHOR_ENVIO_TOKEN = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...
 SHOP_ZIP_CODE = 17520110
 ```
 
-**Status:** Token já foi gerado. Apenas adicionar na Vercel.
+**Status:** ✅ Sistema COMPLETO implementado! Fluxo 100% automatizado.
+
+**Funcionalidades:**
+- ✅ Criar envio no Melhor Envio (1 clique)
+- ✅ Fazer checkout/pagamento (1 clique)
+- ✅ Gerar etiqueta + buscar código de rastreio AUTOMATICAMENTE (1 clique)
+- ✅ Baixar PDF da etiqueta
+- ✅ Email automático ao cliente com rastreio
+- ✅ Atualiza status do pedido para "Enviado"
+
+**Onde usar:** `/admin/pedidos/[id]` - Seção "Melhor Envio"
+
+**Apenas adicionar o token na Vercel.**
 
 ---
 
@@ -93,6 +105,51 @@ NEXT_PUBLIC_SUPABASE_URL = [já configurado]
 NEXT_PUBLIC_SUPABASE_ANON_KEY = [já configurado]
 NEXT_PUBLIC_SITE_URL = https://www.inttools.com.br
 ```
+
+---
+
+---
+
+## 🚀 MELHOR ENVIO - PROCESSO AUTOMATIZADO
+
+### Como Funciona (Visão Geral)
+
+**Antes:** Admin tinha que criar envio manualmente no painel do Melhor Envio, copiar rastreio, colar no sistema, enviar email.
+
+**Agora:** 3 cliques e tudo é feito automaticamente!
+
+### Passo a Passo no Admin
+
+1. **Acesse o pedido:** `/admin/pedidos/[id]`
+2. **Certifique-se:** Pedido está "Pago"
+3. **Clique em:** "1. Criar Envio"
+   - Sistema cria envio no Melhor Envio automaticamente
+   - Usa dados do pedido (endereço, peso, dimensões)
+   - Calcula frete (PAC/SEDEX/Loggi)
+4. **Pague no Melhor Envio:** Acesse painel ME e pague o frete
+5. **Clique em:** "3. Gerar Etiqueta"
+   - ✅ Gera etiqueta no Melhor Envio
+   - ✅ Busca código de rastreio AUTOMATICAMENTE
+   - ✅ Salva rastreio no banco
+   - ✅ Marca pedido como "Enviado"
+   - ✅ Envia email ao cliente com rastreio
+6. **Clique em:** "4. Baixar PDF"
+   - Abre PDF da etiqueta em nova aba
+   - Imprima e cole no pacote
+
+### Vantagens
+
+- ⚡ Velocidade: 3 cliques vs 10+ passos manuais
+- 🎯 Zero erros: Não precisa copiar/colar rastreio
+- 📧 Email automático: Cliente recebe na hora
+- 📊 Rastreamento: Sistema sabe exatamente quando enviou
+- 💼 Profissional: Processo padronizado
+
+### Requisitos
+
+- Produtos devem ter peso/dimensões cadastrados (veja "Cadastrar Peso/Dimensões" abaixo)
+- Pedido deve ter telefone e CPF do cliente
+- Saldo no Melhor Envio para pagar frete
 
 ---
 

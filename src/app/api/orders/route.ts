@@ -64,6 +64,8 @@ export async function POST(request: NextRequest) {
       discount,
       total,
       shippingName,
+      shippingPhone,
+      shippingCpf,
       shippingStreet,
       shippingNumber,
       shippingComplement,
@@ -71,6 +73,7 @@ export async function POST(request: NextRequest) {
       shippingCity,
       shippingState,
       shippingZipCode,
+      shippingMethod,
     } = body
 
     console.log('🔍 Validating fields...', {
@@ -98,6 +101,8 @@ export async function POST(request: NextRequest) {
         status: 'pending',
         paymentStatus: 'pending',
         shippingName,
+        shippingPhone: shippingPhone || null,
+        shippingCpf: shippingCpf || null,
         shippingStreet,
         shippingNumber,
         shippingComplement: shippingComplement || null,
@@ -105,6 +110,7 @@ export async function POST(request: NextRequest) {
         shippingCity,
         shippingState,
         shippingZipCode,
+        shippingMethod: shippingMethod || null,
         items: {
           create: items.map((item: any) => {
             const productId = parseInt(item.productId)
