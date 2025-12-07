@@ -48,11 +48,12 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Calcular peso e dimensoes totais do pacote
+    // Calcular peso, dimensoes e VALOR TOTAL do pacote
     let totalWeight = 0
     let maxWidth = 0
     let maxHeight = 0
     let totalLength = 0
+    let totalValue = 0 // Valor total dos produtos para o seguro
 
     items.forEach((item: any) => {
       const product = products.find(p => p.id === parseInt(item.productId))
@@ -62,6 +63,10 @@ export async function POST(request: NextRequest) {
         maxWidth = Math.max(maxWidth, Number(product.shippingWidth || 11))
         maxHeight = Math.max(maxHeight, Number(product.shippingHeight || 17))
         totalLength += Number(product.shippingLength || 11) * quantity
+
+        // Somar valor dos produtos para seguro
+        const productPrice = item.price || 0
+        totalValue += productPrice * quantity
       }
     })
 
@@ -76,6 +81,7 @@ export async function POST(request: NextRequest) {
       width: maxWidth,
       height: maxHeight,
       length: totalLength,
+      insuranceValue: totalValue,
     })
 
     // Chamar API do Melhor Envio
@@ -135,6 +141,11 @@ export async function POST(request: NextRequest) {
         width: maxWidth,
         height: maxHeight,
         length: totalLength,
+      },
+      options: {
+        insurance_value: totalValue, // Valor do seguro = total dos produtos
+        receipt: false,
+        own_hand: false,
       },
     }
 
