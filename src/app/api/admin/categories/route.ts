@@ -5,6 +5,20 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
 
+    // Se está tentando criar como destaque, verificar limite
+    if (data.isFeatured) {
+      const featuredCount = await prisma.category.count({
+        where: { isFeatured: true },
+      })
+
+      if (featuredCount >= 5) {
+        return NextResponse.json(
+          { error: 'Limite de 5 categorias em destaque atingido. Remova outra categoria de destaque primeiro.' },
+          { status: 400 }
+        )
+      }
+    }
+
     const category = await prisma.category.create({
       data: {
         name: data.name,

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { FiPlus, FiEdit, FiTrash2 } from 'react-icons/fi'
 import { Button } from '@/components/ui/Button'
 import { DeleteCategoryButton } from '@/components/admin/DeleteCategoryButton'
+import { FeaturedToggle } from '@/components/admin/FeaturedToggle'
 
 export const dynamic = 'force-dynamic'
 
@@ -51,11 +52,6 @@ export default async function AdminCategoriesPage() {
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
                   <h3 className="font-semibold text-lg text-gray-900">{category.name}</h3>
-                  {category.isFeatured && (
-                    <span className="px-2 py-0.5 text-xs font-medium bg-primary-100 text-primary-700 rounded">
-                      Destaque
-                    </span>
-                  )}
                   {!category.active && (
                     <span className="px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-600 rounded">
                       Inativa
@@ -69,6 +65,15 @@ export default async function AdminCategoriesPage() {
                 {category.displayOrder > 0 && (
                   <p className="text-xs text-gray-500 mt-1">Ordem: {category.displayOrder}</p>
                 )}
+
+                {/* Toggle de Destaque */}
+                <div className="mt-3">
+                  <FeaturedToggle
+                    categoryId={category.id}
+                    isFeatured={category.isFeatured}
+                    categoryName={category.name}
+                  />
+                </div>
               </div>
               {category.imageUrl && (
                 <div className="w-16 h-16 bg-gray-100 rounded overflow-hidden ml-4">

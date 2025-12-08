@@ -33,9 +33,36 @@ export async function PUT(
 ) {
   try {
     const data = await request.json()
+    const categoryId = parseInt(params.id)
+
+    // Buscar categoria atual
+    const currentCategory = await prisma.category.findUnique({
+      where: { id: categoryId },
+    })
+
+    if (!currentCategory) {
+      return NextResponse.json(
+        { error: 'Categoria não encontrada' },
+        { status: 404 }
+      )
+    }
+
+    // Se está tentando MARCAR como destaque (e antes não estava)
+    if (data.isFeatured && !currentCategory.isFeatured) {
+      const featuredCount = await prisma.category.count({
+        where: { isFeatured: true },
+      })
+
+      if (featuredCount >= 5) {
+        return NextResponse.json(
+          { error: 'Limite de 5 categorias em destaque atingido. Remova outra categoria de destaque primeiro.' },
+          { status: 400 }
+        )
+      }
+    }
 
     const category = await prisma.category.update({
-      where: { id: parseInt(params.id) },
+      where: { id: categoryId },
       data: {
         name: data.name,
         slug: data.slug,
