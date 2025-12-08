@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { ProductCard } from '@/components/product/ProductCard'
-import { ProductFilters } from '@/components/product/ProductFilters'
+import { ProductFiltersWrapper } from '@/components/product/ProductFiltersWrapper'
 
 export const metadata = {
   title: 'Produtos | INT Tools',
@@ -115,10 +115,10 @@ export default async function ProdutosPage({ searchParams }: ProdutosPageProps) 
         </div>
 
         {/* Filters and Products */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Filters Sidebar */}
+        <div className="lg:grid lg:grid-cols-4 gap-6">
+          {/* Filters - Mobile (Drawer) + Desktop (Sidebar) */}
           <div className="lg:col-span-1">
-            <ProductFilters
+            <ProductFiltersWrapper
               categories={categories}
               currentCategory={searchParams.categoria}
               currentSearch={searchParams.busca}
