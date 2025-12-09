@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { sendEmail, paymentApprovedEmail, orderDeliveredEmail } from '@/lib/email'
+import { sendEmail, paymentApprovedEmail, orderShippedEmail, orderDeliveredEmail } from '@/lib/email'
 
 export async function PATCH(
   request: NextRequest,
@@ -85,6 +85,31 @@ export async function PATCH(
         })
 
         console.log('📧 Email de pagamento aprovado enviado')
+      }
+
+      // Email de pedido enviado
+      if (status === 'shipped' && previousOrder.status !== 'shipped') {
+        // Buscar dados de rastreio
+        const trackingCode = updatedOrder.trackingCode || 'Aguardando código'
+        const trackingUrl = updatedOrder.trackingCode
+          ? `https://rastreamento.correios.com.br/app/index.php?codigo=${updatedOrder.trackingCode}`
+          : orderUrl
+
+        const emailHtml = orderShippedEmail({
+          orderNumber: updatedOrder.orderNumber,
+          customerName: updatedOrder.user.name || updatedOrder.user.email,
+          trackingCode,
+          trackingUrl,
+          orderUrl,
+        })
+
+        await sendEmail({
+          to: updatedOrder.user.email,
+          subject: `Pedido enviado - #${updatedOrder.orderNumber} - INT Tools`,
+          html: emailHtml,
+        })
+
+        console.log('📧 Email de pedido enviado enviado')
       }
 
       // Email de pedido entregue

@@ -76,11 +76,6 @@ export function Footer() {
                   Carrinho
                 </Link>
               </li>
-              <li>
-                <Link href="/favoritos" className="hover:text-primary-500 transition-colors">
-                  Favoritos
-                </Link>
-              </li>
             </ul>
           </div>
 

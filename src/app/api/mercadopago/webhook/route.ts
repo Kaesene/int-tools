@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Atualizar pedido no banco
-      await prisma.order.update({
+      const updatedOrder = await prisma.order.update({
         where: { id: orderId },
         data: {
           status: orderStatus,
@@ -71,9 +71,54 @@ export async function POST(request: NextRequest) {
           paidAt: paymentData.status === 'approved' ? new Date() : null,
           updatedAt: new Date(),
         },
+        include: {
+          items: true,
+        },
       })
 
       console.log(`Pedido #${orderId} atualizado: ${orderStatus} / ${paymentStatus}`)
+
+      // DECREMENTAR ESTOQUE quando pagamento aprovado
+      if (paymentData.status === 'approved') {
+        console.log(`Decrementando estoque do pedido #${orderId}...`)
+
+        for (const item of updatedOrder.items) {
+          try {
+            await prisma.product.update({
+              where: { id: item.productId },
+              data: {
+                stock: {
+                  decrement: item.quantity,
+                },
+              },
+            })
+            console.log(`Estoque decrementado: Produto #${item.productId} - ${item.quantity} unidades`)
+          } catch (error) {
+            console.error(`Erro ao decrementar estoque do produto #${item.productId}:`, error)
+          }
+        }
+      }
+
+      // INCREMENTAR ESTOQUE se pedido for cancelado/rejeitado E já tinha sido pago antes
+      if ((paymentData.status === 'rejected' || paymentData.status === 'cancelled') && updatedOrder.paidAt) {
+        console.log(`Incrementando estoque do pedido cancelado #${orderId}...`)
+
+        for (const item of updatedOrder.items) {
+          try {
+            await prisma.product.update({
+              where: { id: item.productId },
+              data: {
+                stock: {
+                  increment: item.quantity,
+                },
+              },
+            })
+            console.log(`Estoque incrementado: Produto #${item.productId} + ${item.quantity} unidades`)
+          } catch (error) {
+            console.error(`Erro ao incrementar estoque do produto #${item.productId}:`, error)
+          }
+        }
+      }
     }
 
     // Sempre retornar 200 para o Mercado Pago

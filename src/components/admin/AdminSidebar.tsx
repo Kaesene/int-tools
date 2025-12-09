@@ -8,7 +8,6 @@ import {
   FiPackage,
   FiShoppingBag,
   FiUsers,
-  FiSettings,
   FiLogOut,
   FiGrid,
   FiTool,
@@ -21,7 +20,6 @@ const menuItems = [
   { icon: FiShoppingBag, label: 'Pedidos', href: '/admin/pedidos' },
   { icon: FiUsers, label: 'Clientes', href: '/admin/clientes' },
   { icon: FiTool, label: 'Setup Storage', href: '/admin/setup' },
-  { icon: FiSettings, label: 'Configurações', href: '/admin/configuracoes' },
 ]
 
 export function AdminSidebar() {
