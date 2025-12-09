@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { MercadoPagoConfig, Payment } from 'mercadopago'
 import { prisma } from '@/lib/prisma'
+import crypto from 'crypto'
 
 // Configurar Mercado Pago
 const client = new MercadoPagoConfig({
@@ -9,11 +10,84 @@ const client = new MercadoPagoConfig({
 
 const payment = new Payment(client)
 
+// Validar assinatura do webhook
+function validateWebhookSignature(request: NextRequest, body: any): boolean {
+  const secret = process.env.MERCADOPAGO_WEBHOOK_SECRET
+
+  // Se não tiver secret configurado, pular validação (modo dev)
+  if (!secret) {
+    console.warn('⚠️ MERCADOPAGO_WEBHOOK_SECRET não configurado - validação desabilitada')
+    return true
+  }
+
+  try {
+    // Extrair headers
+    const xSignature = request.headers.get('x-signature')
+    const xRequestId = request.headers.get('x-request-id')
+
+    if (!xSignature || !xRequestId) {
+      console.error('Headers de assinatura não encontrados')
+      return false
+    }
+
+    // Extrair ts e hash do x-signature
+    // Formato: "ts=1234567890,v1=abc123..."
+    const parts = xSignature.split(',')
+    let ts = ''
+    let hash = ''
+
+    for (const part of parts) {
+      const [key, value] = part.split('=')
+      if (key === 'ts') ts = value
+      if (key === 'v1') hash = value
+    }
+
+    if (!ts || !hash) {
+      console.error('Timestamp ou hash não encontrado no x-signature')
+      return false
+    }
+
+    // Obter data.id do body
+    const dataId = body.data?.id || ''
+
+    // Criar string para assinar: id + request-id + ts
+    const manifest = `id:${dataId};request-id:${xRequestId};ts:${ts};`
+
+    // Calcular HMAC SHA256
+    const hmac = crypto.createHmac('sha256', secret)
+    hmac.update(manifest)
+    const calculatedHash = hmac.digest('hex')
+
+    // Comparar hashes
+    const isValid = calculatedHash === hash
+
+    if (!isValid) {
+      console.error('❌ Assinatura inválida!')
+      console.error('Manifest:', manifest)
+      console.error('Hash esperado:', hash)
+      console.error('Hash calculado:', calculatedHash)
+    } else {
+      console.log('✅ Assinatura validada com sucesso')
+    }
+
+    return isValid
+  } catch (error) {
+    console.error('Erro ao validar assinatura:', error)
+    return false
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
 
     console.log('Webhook Mercado Pago recebido:', body)
+
+    // VALIDAR ASSINATURA (segurança)
+    if (!validateWebhookSignature(request, body)) {
+      console.error('⛔ Webhook rejeitado - assinatura inválida')
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
+    }
 
     // Mercado Pago envia notificações de diferentes tipos
     // Vamos processar apenas notificações de pagamento
