@@ -267,8 +267,8 @@ export default function CheckoutPage() {
       clearCart()
 
       // 3. Redirecionar para checkout do Mercado Pago
-      // Usar sandbox_init_point para teste ou init_point para produção
-      const checkoutUrl = preferenceData.sandbox_init_point || preferenceData.init_point
+      // PRODUÇÃO: usar apenas init_point (pagamento real)
+      const checkoutUrl = preferenceData.init_point
 
       if (checkoutUrl) {
         window.location.href = checkoutUrl
