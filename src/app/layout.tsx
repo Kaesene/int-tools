@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
   description: "Loja especializada em ferramentas profissionais e equipamentos de qualidade. Entrega para todo Brasil.",
   keywords: "ferramentas, equipamentos, ferramentas profissionais, loja de ferramentas",
   authors: [{ name: "INT Tools" }],
+  metadataBase: new URL("https://www.inttools.com.br"),
   openGraph: {
     title: "INT Tools - Ferramentas Profissionais",
     description: "Ferramentas e equipamentos de qualidade com entrega para todo Brasil",
@@ -26,6 +28,20 @@ export const metadata: Metadata = {
     siteName: "INT Tools",
     locale: "pt_BR",
     type: "website",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "INT Tools Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "INT Tools - Ferramentas Profissionais",
+    description: "Ferramentas e equipamentos de qualidade com entrega para todo Brasil",
+    images: ["/logo.png"],
   },
 };
 
@@ -36,6 +52,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
+      <head>
+        <OrganizationSchema />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

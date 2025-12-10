@@ -1,0 +1,7 @@
+# Robots.txt para INT Tools
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://www.inttools.com.br/sitemap.xml
