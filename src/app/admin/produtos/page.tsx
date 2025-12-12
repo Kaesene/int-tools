@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import { formatPrice } from '@/lib/utils'
 import Link from 'next/link'
-import { FiEdit } from 'react-icons/fi'
+import { FiEdit, FiPlus } from 'react-icons/fi'
 import { Button } from '@/components/ui/Button'
 
 export const dynamic = 'force-dynamic'
@@ -24,9 +24,17 @@ export default async function AdminProdutosPage() {
 
   return (
     <div className="p-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Produtos</h1>
-        <p className="text-gray-600 mt-1">{products.length} produtos cadastrados</p>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Produtos</h1>
+          <p className="text-gray-600 mt-1">{products.length} produtos cadastrados</p>
+        </div>
+        <Link href="/admin/produtos/novo">
+          <Button>
+            <FiPlus size={20} />
+            Novo Produto
+          </Button>
+        </Link>
       </div>
 
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
