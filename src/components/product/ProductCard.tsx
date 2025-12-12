@@ -33,9 +33,9 @@ export function ProductCard({
     <Link href={`/produtos/${slug}`}>
       <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
         {/* Image */}
-        <div className="relative bg-gray-100 h-48 flex items-center justify-center">
+        <div className="relative bg-white border-b border-gray-200 h-48 flex items-center justify-center">
           {thumbnail ? (
-            <img src={thumbnail} alt={name} className="w-full h-full object-cover" />
+            <img src={thumbnail} alt={name} className="w-full h-full object-contain p-2" />
           ) : (
             <div className="text-gray-400 text-center p-4">
               <FiShoppingCart size={48} className="mx-auto mb-2" />

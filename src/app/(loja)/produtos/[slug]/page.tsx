@@ -98,12 +98,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         {/* Image Gallery */}
         <div>
-          <div className="bg-gray-100 rounded-lg overflow-hidden mb-4">
+          <div className="bg-white border border-gray-200 rounded-lg overflow-hidden mb-4 flex items-center justify-center">
             {product.thumbnail ? (
               <img
                 src={product.thumbnail}
                 alt={product.name}
-                className="w-full h-96 object-cover"
+                className="w-full h-96 object-contain p-4"
               />
             ) : (
               <div className="w-full h-96 flex items-center justify-center">
